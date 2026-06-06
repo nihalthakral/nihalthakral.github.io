@@ -358,11 +358,9 @@ header {
 </head>
 <body>
 
-<script>
 (function () {
   let deferredPrompt = null;
 
-  // ── Install Screen Inject ──
   const installScreen = document.createElement('div');
   installScreen.style.cssText = 'position:fixed;inset:0;z-index:99999;';
   installScreen.innerHTML = `
@@ -378,90 +376,87 @@ header {
         background: #FAF9F7;
         font-family: 'DM Sans', sans-serif;
         text-align: center;
-        
+        padding: clamp(48px, 10vw, 80px) clamp(28px, 7vw, 64px);
         box-sizing: border-box;
         gap: 0;
       }
 
-      /* App identity block */
       .is-identity {
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-bottom: clamp(28px, 6vw, 48px);
+        margin-bottom: clamp(40px, 9vw, 64px);
       }
       .is-appicon {
-        width: clamp(80px, 22vw, 130px);
-        height: clamp(80px, 22vw, 130px);
-        border-radius: clamp(18px, 5vw, 28px);
-        margin-bottom: clamp(16px, 4vw, 24px);
+        width: clamp(120px, 32vw, 160px);
+        height: clamp(120px, 32vw, 160px);
+        border-radius: clamp(26px, 7vw, 36px);
+        margin-bottom: clamp(24px, 6vw, 32px);
         box-shadow: 0 8px 32px rgba(0,0,0,0.25);
         background: rgba(255,255,255,0.12);
       }
       .is-title {
         color: #E8520A;
-        font-size: clamp(26px, 7vw, 52px);
+        font-size: clamp(38px, 10vw, 60px);
         font-weight: 1000;
-        margin: 0 0 clamp(8px, 2vw, 12px);
+        margin: 0 0 clamp(12px, 3vw, 18px);
         letter-spacing: -0.5px;
         line-height: 1.1;
       }
       .is-desc {
         color: rgba(255,255,255,0.72);
-        font-size: clamp(14px, 3.8vw, 22px);
+        font-size: clamp(20px, 5.5vw, 28px);
         font-weight: 500;
         line-height: 1.4;
-        max-width: 420px;
+        max-width: 480px;
       }
 
-      /* Trust points */
       .is-trust {
         display: flex;
         flex-direction: column;
-        gap: clamp(10px, 2.5vw, 16px);
+        gap: clamp(14px, 3.5vw, 20px);
         width: 100%;
-        max-width: 420px;
-        margin-bottom: clamp(28px, 6vw, 44px);
+        max-width: 480px;
+        margin-bottom: clamp(40px, 9vw, 56px);
       }
       .is-trust-row {
         display: flex;
         align-items: center;
-        gap: clamp(10px, 2.5vw, 16px);
+        gap: clamp(14px, 3.5vw, 20px);
         background: rgba(255,255,255,0.10);
-        border-radius: clamp(12px, 3vw, 18px);
-        padding: clamp(10px, 2.5vw, 16px) clamp(14px, 3.5vw, 22px);
+        border-radius: clamp(16px, 4vw, 22px);
+        padding: clamp(16px, 4vw, 22px) clamp(20px, 5vw, 28px);
         text-align: left;
       }
       .is-trust-icon {
-        font-size: clamp(20px, 5vw, 30px);
+        font-size: clamp(30px, 8vw, 40px);
         flex-shrink: 0;
         line-height: 1;
       }
       .is-trust-text {
         color: #000000;
-        font-size: clamp(13px, 3.5vw, 20px);
+        font-size: clamp(18px, 5vw, 26px);
         font-weight: 600;
         line-height: 1.3;
       }
       .is-trust-text span {
         display: block;
         color: #000000;
-        font-size: clamp(11px, 2.8vw, 16px);
+        font-size: clamp(15px, 4vw, 20px);
         font-weight: 400;
-        margin-top: 2px;
+        margin-top: 4px;
       }
 
-      /* Install button */
       .is-btn {
         display: none;
         width: 100%;
-        max-width: 420px;
+        max-width: 480px;
         background: #E8520A;
         color: #FAF9F7;
         border: none;
         border-radius: 100px;
-        padding: clamp(14px, 3.5vw, 22px) clamp(32px, 8vw, 56px);
-        font-size: clamp(17px, 4.5vw, 26px);
+        padding: clamp(20px, 5vw, 28px) clamp(40px, 10vw, 64px);
+        font-size: clamp(22px, 6vw, 32px);
         font-weight: 800;
         font-family: 'DM Sans', sans-serif;
         cursor: pointer;
@@ -472,27 +467,25 @@ header {
       .is-btn:active:not(:disabled) { opacity: 0.85; transform: scale(0.97); }
       .is-btn:disabled { cursor: default; opacity: 0.80; }
 
-      /* Chrome note */
       .is-chrome-note {
-        margin-top: clamp(12px, 3vw, 18px);
+        margin-top: clamp(18px, 4.5vw, 24px);
         color: #000000;
-        font-size: clamp(11px, 2.8vw, 16px);
+        font-size: clamp(15px, 4vw, 20px);
         font-weight: 400;
-        max-width: 360px;
+        max-width: 420px;
         line-height: 1.5;
       }
 
-      /* Dots animation */
       .is-dots {
         display: inline-flex;
         align-items: center;
-        gap: clamp(5px, 1.5vw, 9px);
+        gap: clamp(7px, 2vw, 12px);
         height: 1em;
         vertical-align: middle;
       }
       .is-dots span {
-        width: clamp(7px, 2vw, 11px);
-        height: clamp(7px, 2vw, 11px);
+        width: clamp(10px, 3vw, 15px);
+        height: clamp(10px, 3vw, 15px);
         background: #1B5E42;
         border-radius: 50%;
         display: inline-block;
@@ -583,9 +576,7 @@ header {
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') {
           deferredPrompt = null;
-          // appinstalled event handle karega aage
         } else {
-          // User ne cancel kiya — wapas install button
           btn.disabled  = false;
           btn.innerHTML = 'Install';
         }
@@ -605,31 +596,25 @@ header {
   applyMode();
   window.matchMedia('(display-mode: standalone)').addEventListener('change', applyMode);
   const swAlreadyActive = !!(navigator.serviceWorker && navigator.serviceWorker.controller);
-  // Early-captured prompt check
   if (window._deferredPrompt) {
     deferredPrompt = window._deferredPrompt;
     window._deferredPrompt = null;
   }
   if (swAlreadyActive) {
-    // Returning visitor: SW pehle se registered hai
-    // Dots dikhane ki zarurat nahi — seedha decide karo
     if (deferredPrompt) {
-      setBtn('install');   // Prompt ready hai → Install
+      setBtn('install');
     } else {
-      setBtn('installed'); // Koi prompt nahi → Already installed
+      setBtn('installed');
     }
   } else {
-    // First visit: SW abhi register ho raha hai — dots dikhao
     const btn = document.getElementById('is-btn');
     if (btn) {
       btn.style.display = 'inline-block';
     }
     setBtn('loading');
-    // Timeout: 10 sec mein prompt nahi aaya toh Try Again
     let promptTimer = setTimeout(function () {
       if (!deferredPrompt) setBtn('refresh');
     }, 10000);
-    // Prompt aaya → timer cancel, Install dikhao
     window.addEventListener('beforeinstallprompt', function (e) {
       clearTimeout(promptTimer);
       e.preventDefault();
@@ -637,7 +622,6 @@ header {
       setBtn('install');
     });
   }
-  // Prompt aaya (returning visitor ke liye bhi catch karo)
   window.addEventListener('beforeinstallprompt', function (e) {
     if (swAlreadyActive) {
       e.preventDefault();
@@ -645,14 +629,12 @@ header {
       setBtn('install');
     }
   });
-  // Install complete
   window.addEventListener('appinstalled', function () {
     deferredPrompt = null;
     setBtn('installed');
   });
 
 })();
-</script>
 
 <header>
   <div class="hicon" id="hicon">🛍️</div>
