@@ -456,8 +456,8 @@ header {
         display: none;
         width: 100%;
         max-width: 420px;
-        background: #fff;
-        color: #1B5E42;
+        background: #E8520A;
+        color: #FAF9F7;
         border: none;
         border-radius: 100px;
         padding: clamp(14px, 3.5vw, 22px) clamp(32px, 8vw, 56px);
@@ -574,7 +574,7 @@ header {
       btn.innerHTML = '<span class="is-dots"><span></span><span></span><span></span></span>';
       btn.onclick   = null;
     } else if (type === 'install') {
-      btn.innerHTML = '📥&nbsp;&nbsp;Install';
+      btn.innerHTML = 'Install';
       btn.onclick = async function () {
         if (!deferredPrompt) return;
         btn.disabled  = true;
@@ -587,7 +587,7 @@ header {
         } else {
           // User ne cancel kiya — wapas install button
           btn.disabled  = false;
-          btn.innerHTML = '📥&nbsp;&nbsp;Install';
+          btn.innerHTML = 'Install';
         }
       };
     } else if (type === 'installed') {
