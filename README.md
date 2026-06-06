@@ -13,10 +13,10 @@
 
 # *Problem* Solver
 
-**Nihal Thakral** · Custom Software Builder
+**Nihal Thakral** · Developer
 
-[![Website](https://img.shields.io/badge/🌐%20Live%20Site-nihalthakral.github.io-e8520a?style=for-the-badge)](https://nihalthakral.github.io)
-[![Email](https://img.shields.io/badge/📧%20Email-nihalthakral.trader%40gmail.com-1a1a1a?style=for-the-badge)](mailto:nihalthakral.trader@gmail.com)
+[![Website](https://img.shields.io/badge/nihalthakral.github.io-e8520a?style=for-the-badge)](https://nihalthakral.github.io)
+[![Email](https://img.shields.io/badge/📧%20Email-1a1a1a?style=for-the-badge)](mailto:nihalthakral.trader@gmail.com)
 
 ---
 
@@ -45,6 +45,6 @@
 © 2026 · Nihal Thakral · Problem Solver
 ```
 
-*"Mein Software nahi bechta, mein Time bechta hoon."*
+*"My Quote = I am not Selling Product/Service, I Sell Creativity"*
 
 </div>
