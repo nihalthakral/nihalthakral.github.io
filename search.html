@@ -300,7 +300,7 @@
     errorMsg.classList.remove('visible');
 
     try {
-      const url = 'user/' + encodeURIComponent(id) + '/index.html';
+      const url = 'user/' + encodeURIComponent(id) + '/download.html';
       const res = await fetch(url, { method: 'HEAD' });
 
       if (res.ok) {
