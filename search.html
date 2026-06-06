@@ -40,11 +40,14 @@
     gap: 0.45rem;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #888;
+    color: #fff;
+    background: #E8520A;
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
     text-decoration: none;
-    transition: color 0.18s;
+    transition: background 0.18s;
   }
-  .nav-back:hover { color: #1a1a1a; }
+  .nav-back:hover { background: #d04708; }
   .nav-back svg { width: 14px; height: 14px; }
 
   /* MAIN */
@@ -248,7 +251,6 @@
         autocomplete="off"
         autocorrect="off"
         spellcheck="false"
-        autofocus
       >
       <button class="btn-search" id="searchBtn" onclick="handleSearch()">
         <div class="spinner"></div>
@@ -287,7 +289,7 @@
   });
 
   async function handleSearch() {
-    const id = input.value.trim();
+    const id = input.value.trim().toLowerCase();
 
     if (!id) {
       showError('please enter your id.');
