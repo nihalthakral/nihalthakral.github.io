@@ -707,7 +707,7 @@ header {
         </div>
       </div>
       <div class="qrow">
-        <button class="qbtn" ontouchstart="ch(event,'pc',-1);startHold('pc',-1)" ontouchend="endHold()" ontouchcancel="endHold()" onclick="return false">−</button>
+        <button class="qbtn" ontouchstart="ch(event,'pc',-1);startHold('pc',-1)" ontouchend="endHold()" ontouchcancel="endHold()" onmousedown="ch(event,'pc',-1);startHold('pc',-1)" onmouseup="endHold()" onmouseleave="endHold()">−</button>
         <input class="qinp" type="number" inputmode="numeric" min="0" max="999" id="q-pc" value="0" oninput="sq('pc',this.value)" onblur="sb('pc')" onfocus="sf('pc')" disabled>
         <button class="qbtn" ontouchstart="ch(event,'pc',1);startHold('pc',1)" ontouchend="endHold()" ontouchcancel="endHold()" onclick="return false">+</button>
       </div>
