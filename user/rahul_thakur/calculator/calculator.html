@@ -361,69 +361,74 @@ header {
 <script>
 (function () {
 
-  /* ── FIX 1: Viewport meta inject karo — agar yeh nahi hai toh mobile par
-     browser 980px desktop width pe render karta hai, sab 40% chhota dikhta hai ── */
+  /* ── Viewport meta inject ── */
   (function () {
     var vp = document.querySelector('meta[name="viewport"]');
     if (!vp) {
       vp = document.createElement('meta');
       vp.name = 'viewport';
-      (document.head || document.documentElement).insertBefore(
-        vp, (document.head || document.documentElement).firstChild
-      );
+      (document.head || document.documentElement).insertBefore(vp, (document.head || document.documentElement).firstChild);
     }
-    /* existing meta ko bhi update karo — purana restrictive value ho sakta tha */
     vp.content = 'width=device-width, initial-scale=1.0, minimum-scale=1.0';
   })();
 
   let deferredPrompt = null;
 
   const installScreen = document.createElement('div');
-  installScreen.style.cssText = 'position:fixed;inset:0;z-index:99999;overflow-y:auto;-webkit-overflow-scrolling:touch;';
+  /* overflow:hidden — scroll kabhi nahi, zoom se fit hoga */
+  installScreen.style.cssText = 'position:fixed;inset:0;z-index:99999;overflow:hidden;';
   installScreen.innerHTML = `
     <style>
       @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap');
       .is-wrap {
-        display:flex;flex-direction:column;align-items:center;justify-content:center;
-        min-height:100%;background:#FAF9F7;font-family:'DM Sans',sans-serif;
-        text-align:center;padding:clamp(32px,8vw,64px) clamp(24px,8vw,64px);
+        display:flex;flex-direction:column;align-items:center;
+        height:100%;                        /* container ki poori height lo */
+        overflow:hidden;                    /* scroll band */
+        justify-content:space-evenly;       /* items height mein distribute ho jaayein */
+        background:#FAF9F7;font-family:'DM Sans',sans-serif;
+        text-align:center;
+        padding:min(3vw,2.5vh) min(6vw,4vh);
         box-sizing:border-box;gap:0;
       }
-      .is-identity { display:flex;flex-direction:column;align-items:center;margin-bottom:clamp(28px,6vw,48px); }
+      .is-identity { display:flex;flex-direction:column;align-items:center;margin:0; }
+
+      /* Icon: vw AUR vh dono se control — jo chhota ho woh laga */
       .is-appicon {
-        width:clamp(100px,28vw,200px);height:clamp(100px,28vw,200px);
-        border-radius:clamp(18px,5vw,28px);margin-bottom:clamp(16px,4vw,24px);
+        width:min(clamp(80px,28vw,200px),22vh);
+        height:min(clamp(80px,28vw,200px),22vh);
+        border-radius:clamp(16px,5vw,28px);
+        margin-bottom:min(clamp(10px,3vw,24px),2vh);
         box-shadow:0 8px 32px rgba(0,0,0,0.25);background:rgba(255,255,255,0.12);
+        flex-shrink:0;
       }
 
-      /* FIX 2: "font-size;" → "font-size:" — original mein TYPO tha, CSS apply hi nahi hota tha */
-      .is-title { color:#E8520A;font-size:clamp(28px,9vw,100px);font-weight:1000;margin:0 0 clamp(8px,2vw,12px);letter-spacing:-0.5px;line-height:1.1; }
+      /* Title: TYPO FIX + min() se height-aware */
+      .is-title { color:#E8520A;font-size:min(clamp(24px,9vw,100px),8vh);font-weight:1000;margin:0 0 min(clamp(6px,2vw,12px),1vh);letter-spacing:-0.5px;line-height:1.1; }
 
-      .is-desc { color:rgba(255,255,255,0.72);font-size:clamp(15px,4.5vw,22px);font-weight:500;line-height:1.4;max-width:420px; }
-      .is-trust { display:flex;flex-direction:column;gap:clamp(10px,2.5vw,16px);width:100%;max-width:420px;margin-bottom:clamp(28px,6vw,44px); }
+      .is-desc { color:rgba(255,255,255,0.72);font-size:min(clamp(14px,4.5vw,22px),3.5vh);font-weight:500;line-height:1.4;max-width:420px; }
+      .is-trust { display:flex;flex-direction:column;gap:min(clamp(8px,2vw,16px),1.5vh);width:100%;max-width:420px;margin:0; }
       .is-trust-row {
-        display:flex;align-items:center;gap:clamp(10px,2.5vw,16px);
+        display:flex;align-items:center;gap:min(clamp(10px,2.5vw,16px),2vh);
         background:rgba(255,255,255,0.10);border-radius:clamp(12px,3vw,18px);
-        padding:clamp(10px,2.5vw,16px) clamp(14px,3.5vw,22px);text-align:left;
+        padding:min(clamp(10px,2.5vw,16px),1.8vh) clamp(14px,3.5vw,22px);text-align:left;
       }
-      .is-trust-icon { font-size:clamp(22px,6vw,30px);flex-shrink:0;line-height:1; }
-
-      /* FIX 4: min values bade kiye — 13px→16px aur 11px→13px */
-      .is-trust-text { color:#000000;font-size:clamp(16px,4.2vw,20px);font-weight:600;line-height:1.3; }
-      .is-trust-text span { display:block;color:#000000;font-size:clamp(13px,3.2vw,16px);font-weight:400;margin-top:2px; }
-
-      /* FIX 4: button font bhi bada */
+      .is-trust-icon { font-size:min(clamp(20px,6vw,30px),4vh);flex-shrink:0;line-height:1; }
+      .is-trust-text { color:#000000;font-size:min(clamp(15px,4.2vw,20px),3vh);font-weight:600;line-height:1.3; }
+      .is-trust-text span { display:block;color:#000000;font-size:min(clamp(12px,3.2vw,16px),2.5vh);font-weight:400;margin-top:2px; }
       .is-btn {
         display:none;width:100%;max-width:420px;background:#E8520A;color:#FAF9F7;
-        border:none;border-radius:100px;padding:clamp(16px,4.5vw,22px) clamp(32px,8vw,56px);
-        font-size:clamp(20px,5.5vw,26px);font-weight:800;font-family:'DM Sans',sans-serif;
+        border:none;border-radius:100px;
+        padding:min(clamp(15px,4.5vw,22px),2.5vh) clamp(32px,8vw,56px);
+        font-size:min(clamp(19px,5.5vw,26px),4.5vh);
+        font-weight:800;font-family:'DM Sans',sans-serif;
         cursor:pointer;transition:opacity 0.15s,transform 0.15s;letter-spacing:0.2px;
         box-shadow:0 4px 20px rgba(0,0,0,0.20);box-sizing:border-box;
-        min-height:clamp(54px,14vw,68px);-webkit-tap-highlight-color:transparent;
+        min-height:min(clamp(52px,13vw,68px),9vh);
+        flex-shrink:0;-webkit-tap-highlight-color:transparent;
       }
       .is-btn:active:not(:disabled){opacity:0.85;transform:scale(0.97);}
       .is-btn:disabled{cursor:default;opacity:0.80;}
-      .is-chrome-note { margin-top:clamp(12px,3vw,18px);color:#000000;font-size:clamp(13px,3.5vw,16px);font-weight:400;max-width:360px;line-height:1.5; }
+      .is-chrome-note { margin:0;color:#000000;font-size:min(clamp(12px,3.5vw,16px),2.5vh);font-weight:400;max-width:360px;line-height:1.5; }
       .is-dots { display:inline-flex;align-items:center;gap:clamp(5px,1.5vw,9px);height:1em;vertical-align:middle; }
       .is-dots span {
         width:clamp(7px,2vw,11px);height:clamp(7px,2vw,11px);background:#1B5E42;
@@ -464,67 +469,111 @@ header {
   `;
   document.body.appendChild(installScreen);
 
+  /* ── fitToViewport: last safety net ──
+     Agar CSS ke baad bhi content height se zyada hai,
+     zoom se poori wrap ko shrink karo — scroll zero, clip zero  ── */
+  function fitToViewport() {
+    var wrap = installScreen.querySelector('.is-wrap');
+    if (!wrap) return;
+    wrap.style.zoom = '1'; /* pehle reset karo */
+    requestAnimationFrame(function () {
+      var contentH = wrap.scrollHeight;
+      var screenH  = window.innerHeight;
+      if (contentH > screenH) {
+        wrap.style.zoom = String(screenH / contentH);
+      }
+    });
+  }
+
+  /* ── applyMobileSizing: ab W aur H dono consider karta hai ── */
   function applyMobileSizing() {
-    var W = window.innerWidth;
+    var W  = window.innerWidth;
+    var H  = window.innerHeight;
+    if (W >= 900) {
+      /* Desktop par bhi fitToViewport chalao */
+      requestAnimationFrame(fitToViewport);
+      return;
+    }
 
-    /* FIX 3: threshold 600 → 900 — bade phones aur tablets bhi cover ho jaayein */
-    if (W >= 900) return;
-
-    var s = installScreen;
+    var s  = installScreen;
+    /* vmin = dono axes mein se chhota — isse sizes dono dimensions ke liye safe rahte hain */
+    var VM = Math.min(W, H);
 
     var wrap = s.querySelector('.is-wrap');
     if (wrap) {
-      wrap.style.padding = '16px 14px';
-      wrap.style.justifyContent = 'flex-start';
-      wrap.style.paddingTop = Math.max(24, Math.round(window.innerHeight * 0.06)) + 'px';
+      wrap.style.zoom = '1'; /* reset, fitToViewport baad mein set karega */
+      wrap.style.padding = Math.round(VM * 0.025) + 'px ' + Math.round(W * 0.04) + 'px';
     }
 
     var identity = s.querySelector('.is-identity');
-    if (identity) { identity.style.marginBottom = '16px'; identity.style.width = '100%'; }
+    if (identity) { identity.style.margin = '0'; }
 
     var icon = s.querySelector('.is-appicon');
     if (icon) {
-      var sz = Math.round(W * 0.30) + 'px';
+      var sz = Math.round(Math.min(W * 0.28, H * 0.21)) + 'px';
       icon.style.width = sz; icon.style.height = sz;
-      icon.style.borderRadius = '22px'; icon.style.marginBottom = '12px';
+      icon.style.borderRadius = '22px';
+      icon.style.marginBottom = Math.round(VM * 0.022) + 'px';
     }
 
     var title = s.querySelector('.is-title');
-    if (title) { title.style.fontSize = Math.round(W * 0.115) + 'px'; title.style.marginBottom = '8px'; }
+    if (title) {
+      title.style.fontSize = Math.round(Math.min(W * 0.10, H * 0.072)) + 'px';
+      title.style.marginBottom = Math.round(VM * 0.010) + 'px';
+    }
 
     var desc = s.querySelector('.is-desc');
-    if (desc) { desc.style.fontSize = Math.round(W * 0.052) + 'px'; desc.style.maxWidth = '100%'; }
+    if (desc) {
+      desc.style.fontSize = Math.round(Math.min(W * 0.048, H * 0.036)) + 'px';
+      desc.style.maxWidth = '100%';
+    }
 
     var trust = s.querySelector('.is-trust');
-    if (trust) { trust.style.gap = '10px'; trust.style.maxWidth = '100%'; trust.style.marginBottom = '14px'; }
+    if (trust) {
+      trust.style.gap = Math.round(VM * 0.016) + 'px';
+      trust.style.maxWidth = '100%';
+      trust.style.margin = '0';
+    }
 
     s.querySelectorAll('.is-trust-row').forEach(function (row) {
-      row.style.borderRadius = '14px'; row.style.padding = '13px 14px'; row.style.gap = '12px';
+      row.style.borderRadius = '14px';
+      row.style.padding = Math.round(Math.min(W * 0.026, H * 0.018)) + 'px ' + Math.round(W * 0.034) + 'px';
+      row.style.gap = Math.round(VM * 0.024) + 'px';
     });
 
     s.querySelectorAll('.is-trust-icon').forEach(function (ic) {
-      ic.style.fontSize = Math.round(W * 0.085) + 'px';
+      ic.style.fontSize = Math.round(Math.min(W * 0.078, H * 0.056)) + 'px';
     });
 
-    /* FIX 4: JS sizing mein bhi min values bade */
     s.querySelectorAll('.is-trust-text').forEach(function (t) {
-      t.style.fontSize = Math.round(W * 0.058) + 'px';
+      t.style.fontSize = Math.round(Math.min(W * 0.054, H * 0.038)) + 'px';
       var span = t.querySelector('span');
-      if (span) { span.style.fontSize = Math.round(W * 0.046) + 'px'; span.style.marginTop = '3px'; }
+      if (span) {
+        span.style.fontSize = Math.round(Math.min(W * 0.043, H * 0.030)) + 'px';
+        span.style.marginTop = '2px';
+      }
     });
 
     var btn = document.getElementById('is-btn');
     if (btn) {
-      btn.style.maxWidth = '100%';
-      btn.style.padding = Math.round(W * 0.048) + 'px ' + Math.round(W * 0.08) + 'px';
-      btn.style.fontSize = Math.round(W * 0.072) + 'px';
-      btn.style.minHeight = Math.round(W * 0.14) + 'px';
+      btn.style.maxWidth   = '100%';
+      btn.style.padding    = Math.round(Math.min(W * 0.042, H * 0.028)) + 'px ' + Math.round(W * 0.08) + 'px';
+      btn.style.fontSize   = Math.round(Math.min(W * 0.066, H * 0.048)) + 'px';
+      btn.style.minHeight  = Math.round(Math.min(W * 0.125, H * 0.090)) + 'px';
     }
 
     var note = s.querySelector('.is-chrome-note');
-    if (note) { note.style.fontSize = Math.round(W * 0.043) + 'px'; note.style.marginTop = '10px'; note.style.maxWidth = '100%'; }
+    if (note) {
+      note.style.fontSize = Math.round(Math.min(W * 0.038, H * 0.028)) + 'px';
+      note.style.margin   = '0';
+      note.style.maxWidth = '100%';
+    }
+
+    /* Sizing set hone ke baad ek frame wait karo, phir fit check karo */
+    requestAnimationFrame(fitToViewport);
   }
 
+  /* ── Display Toggle ── */
   function applyMode() {
     var isPWA = window.matchMedia('(display-mode: standalone)').matches
                 || window.navigator.standalone === true;
@@ -542,6 +591,7 @@ header {
     }
   }
 
+  /* ── Button States ── */
   function setBtn(type) {
     var btn = document.getElementById('is-btn');
     if (!btn) return;
@@ -575,12 +625,14 @@ header {
       btn.disabled  = false;
       btn.onclick   = function () { window.location.reload(); };
     }
-    applyMobileSizing();
+    requestAnimationFrame(fitToViewport);
   }
 
+  /* ── Init ── */
   applyMode();
   window.matchMedia('(display-mode: standalone)').addEventListener('change', applyMode);
-  window.addEventListener('resize', applyMobileSizing);
+  /* Resize par dono chalao — rotate karne par bhi sahi rahega */
+  window.addEventListener('resize', function () { applyMobileSizing(); });
 
   const swAlreadyActive = !!(navigator.serviceWorker && navigator.serviceWorker.controller);
   if (window._deferredPrompt) {
