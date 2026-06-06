@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="hi" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home - Nihal Thakral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: #faf9f7;
+    color: #1a1a1a;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    padding: 1.6rem 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ebebeb;
+  }
+  .nav-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.01em;
+  }
+  .nav-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.2rem;
+    background: #e8520a;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-download:hover { background: #d04708; }
+  .nav-download svg { width: 14px; height: 14px; }
+
+  /* HERO */
+  .hero {
+    min-height: calc(100vh - 65px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 5%;
+    text-align: center;
+  }
+  .hero-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(4.5rem, 18vw, 18rem);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: #1a1a1a;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: #e8520a;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid #ebebeb;
+    margin: 0;
+  }
+
+  /* BUSINESS PLAN SECTION */
+  .business {
+    padding: 5rem 7%;
+  }
+  .business-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: #1a1a1a;
+    margin-bottom: 2.5rem;
+  }
+  .business-area {
+    background: #efefef;
+    border-radius: 16px;
+    padding: 3rem;
+    overflow-x: auto;
+  }
+
+  /* TEXT ART — fully responsive font size */
+  .plan-pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(8px, 1.85vw, 13px);
+    font-weight: 400;
+    line-height: 1.85;
+    white-space: pre;
+    color: #555;
+    margin: 0;
+  }
+  .plan-pre .bold   { color: #1a1a1a; font-weight: 700; }
+  .plan-pre .green  { color: #1D9E75; font-weight: 700; }
+  .plan-pre .blue   { color: #378ADD; font-weight: 700; }
+  .plan-pre .purple { color: #7F77DD; font-weight: 700; }
+  .plan-pre .amber  { color: #BA7517; font-weight: 700; }
+  .plan-pre .teal   { color: #0F6E56; font-weight: 700; }
+  .plan-pre .red    { color: #E24B4A; font-weight: 700; }
+
+  /* FOOTER */
+  footer {
+    padding: 1.8rem 7%;
+    border-top: 1px solid #ebebeb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-name { font-size: 0.85rem; color: #aaa; font-weight: 400; }
+  .footer-copy { font-size: 0.82rem; color: #bbb; }
+
+  @media (max-width: 600px) {
+    nav { padding: 1.2rem 5%; }
+    .hero { padding: 3rem 5%; }
+    .business { padding: 3.5rem 5%; }
+    footer { padding: 1.5rem 5%; }
+    .business-area { padding: 1.5rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-name">Nihal Thakral</span>
+  <a href="download.php" class="nav-download">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Download your software
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <h1 class="hero-title">
+    <em>Problem</em><br>Solver
+  </h1>
+</section>
+
+<hr class="divider">
+
+<!-- BUSINESS PLAN -->
+<section class="business">
+  <h2 class="business-title">My Business Process</h2>
+  <div class="business-area">
+    <pre class="plan-pre">
+┌─────────────────────────────────────────────────┐
+│  <span class="bold">        aap mere client hain                   </span>
+│  <span>     aapko kuch nahi karna, bas ek mauka do    </span>     
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│  <span class="bold">            Developer ka kaam                  </span>
+│  <span>     neeche dekho, saari details hain.         </span>
+└─────────────────────────────────────────────────┘
+
+<span class="green">  STEP 1  ──  OBSERVE</span>
+  ╔═══════════════════════════════════════════════╗
+  ║  Mein aaunga → sirf <span class="bold">1 ghanta</span> baithunga        
+  ║  Aap apna kaam karte raho, mujhe ignore karo  
+  ║  Mein sirf dekhunga — koi sawaal nahi         
+  ╚═══════════════════════════════════════════════╝
+        [ <span class="green">✓ aapka effort = zero)</span> ]
+
+                    │
+                    ▼
+
+<span class="blue">  STEP 2  ──  BUILD</span>
+  ╔══════════════════════════════════════════╗
+  ║  Mein apne office mein kaam karta hoon   
+  ║  <span class="bold">Sirf aapke liye</span> — custom software/app   
+  ║  <span class="bold">1 hafte ke andar</span> ready  ── 99% pakka    
+  ╚══════════════════════════════════════════╝
+  [ <span class="blue">✓ aapki woh problem solve karunga, jo aapko pata bhi nahi hai 
+  lekin aap usko face karte ho 
+  jiski wajah se aapka time aur mehnat waste hoti hai</span> ]
+
+                    │
+                    ▼
+
+<span class="purple">  STEP 3  ──  FREE TRIAL 🎁</span>
+  ╔══════════════════════════════════════════╗
+  ║  <span class="bold">Pura 1 mahina</span> — bilkul free             
+  ║  Koi payment nahi                        
+  ║  Koi documents nahi                      
+  ╚══════════════════════════════════════════╝
+        [ <span class="purple">✓ zero risk, zero paisa</span> ]
+
+                    │
+                    ▼
+
+<span class="amber">  STEP 4  ──  AAPKI MARZI</span>
+  ╔═════════════════════════════════════════════════╗
+  ║  1 Mahine baad <span class="bold">sirf aap decide karte ho</span>  
+  ║                                          
+  ║       <span class="green">🙋 Pasand aaya?</span>  →  Purchase karo     
+  ║       <span class="red">☹️ Nahi aaya?</span>   →  Mana karo, chalega 
+  ║                  koi feelings 💔 hurt nahi hongi.        
+  ╚═════════════════════════════════════════════════╝
+    [ <span class="amber">✓ koi pressure nahi, 100% aapka faisla</span> ]
+
+┌─────────────────────────────────────────────────┐
+│                                                 
+│   <span class="teal">★  Aap sirf PERMISSION dete ho — bas itna  ★ </span>
+│      baaki sab mera kaam, aapko kuch nahi karna.
+│                                                 
+└─────────────────────────────────────────────────┘</pre>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-name">nihalthakral.trader@gmail.com</span>
+  <span class="footer-copy">© 2026</span>
+</footer>
+
+</body>
+</html>
