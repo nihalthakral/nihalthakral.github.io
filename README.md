@@ -45,6 +45,6 @@
 © 2026 · Nihal Thakral · Problem Solver
 ```
 
-*"My Quote = I am not Selling Product/Service, I Sell Creativity"*
+**My Quote = I am not Selling Product/Service, I Sell Creativity**
 
 </div>
