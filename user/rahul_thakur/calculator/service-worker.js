@@ -24,9 +24,10 @@ self.addEventListener('install', function(e) {
           if (res.ok) cache.put(url, res);
         }).catch(function() {});
       });
+    }).then(function() {
+      return self.skipWaiting();
     })
   );
-  self.skipWaiting();
 });
 
 // Activate: purane caches hata do
