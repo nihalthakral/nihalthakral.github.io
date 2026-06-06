@@ -363,32 +363,58 @@ header {
   let deferredPrompt = null;
 
   const installScreen = document.createElement('div');
-  installScreen.style.cssText = 'position:fixed;inset:0;z-index:99999;overflow:hidden;';
+  installScreen.style.cssText = 'position:fixed;inset:0;z-index:99999;overflow-y:auto;';
   installScreen.innerHTML = `
     <style>
       @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap');
-      .is-wrap{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100%;background:#FAF9F7;font-family:'DM Sans',sans-serif;text-align:center;padding:6px 6px;box-sizing:border-box;gap:0;transform-origin:top center;}
-      .is-identity{display:flex;flex-direction:column;align-items:center;margin-bottom:18px;}
-      .is-appicon{width:110px;height:110px;border-radius:24px;margin-bottom:14px;box-shadow:0 8px 32px rgba(0,0,0,0.25);background:rgba(255,255,255,0.12);}
-      .is-title{color:#E8520A;font-size:40px;font-weight:1000;margin:0 0 8px;letter-spacing:-0.5px;line-height:1.1;}
-      .is-desc{color:rgba(255,255,255,0.72);font-size:18px;font-weight:500;line-height:1.4;max-width:100%;}
-      .is-trust{display:flex;flex-direction:column;gap:10px;width:100%;margin-bottom:16px;}
-      .is-trust-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.10);border-radius:16px;padding:14px 16px;text-align:left;}
-      .is-trust-icon{font-size:28px;flex-shrink:0;line-height:1;}
-      .is-trust-text{color:#000000;font-size:18px;font-weight:600;line-height:1.3;}
-      .is-trust-text span{display:block;color:#000000;font-size:14px;font-weight:400;margin-top:3px;}
-      .is-btn{display:none;width:100%;background:#E8520A;color:#FAF9F7;border:none;border-radius:100px;padding:18px 32px;font-size:22px;font-weight:800;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity 0.15s,transform 0.15s;letter-spacing:0.2px;box-shadow:0 4px 20px rgba(0,0,0,0.20);box-sizing:border-box;}
+      .is-wrap {
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        min-height:100%;background:#FAF9F7;font-family:'DM Sans',sans-serif;
+        text-align:center;padding:clamp(32px,8vw,64px) clamp(24px,8vw,64px);
+        box-sizing:border-box;gap:0;
+      }
+      .is-identity { display:flex;flex-direction:column;align-items:center;margin-bottom:clamp(28px,6vw,48px); }
+      .is-appicon {
+        width:clamp(80px,22vw,130px);height:clamp(80px,22vw,130px);
+        border-radius:clamp(18px,5vw,28px);margin-bottom:clamp(16px,4vw,24px);
+        box-shadow:0 8px 32px rgba(0,0,0,0.25);background:rgba(255,255,255,0.12);
+      }
+      .is-title { color:#E8520A;font-size:clamp(26px,7vw,52px);font-weight:1000;margin:0 0 clamp(8px,2vw,12px);letter-spacing:-0.5px;line-height:1.1; }
+      .is-desc { color:rgba(255,255,255,0.72);font-size:clamp(14px,3.8vw,22px);font-weight:500;line-height:1.4;max-width:420px; }
+      .is-trust { display:flex;flex-direction:column;gap:clamp(10px,2.5vw,16px);width:100%;max-width:420px;margin-bottom:clamp(28px,6vw,44px); }
+      .is-trust-row {
+        display:flex;align-items:center;gap:clamp(10px,2.5vw,16px);
+        background:rgba(255,255,255,0.10);border-radius:clamp(12px,3vw,18px);
+        padding:clamp(10px,2.5vw,16px) clamp(14px,3.5vw,22px);text-align:left;
+      }
+      .is-trust-icon { font-size:clamp(20px,5vw,30px);flex-shrink:0;line-height:1; }
+      .is-trust-text { color:#000000;font-size:clamp(13px,3.5vw,20px);font-weight:600;line-height:1.3; }
+      .is-trust-text span { display:block;color:#000000;font-size:clamp(11px,2.8vw,16px);font-weight:400;margin-top:2px; }
+      .is-btn {
+        display:none;width:100%;max-width:420px;background:#E8520A;color:#FAF9F7;
+        border:none;border-radius:100px;padding:clamp(14px,3.5vw,22px) clamp(32px,8vw,56px);
+        font-size:clamp(17px,4.5vw,26px);font-weight:800;font-family:'DM Sans',sans-serif;
+        cursor:pointer;transition:opacity 0.15s,transform 0.15s;letter-spacing:0.2px;
+        box-shadow:0 4px 20px rgba(0,0,0,0.20);box-sizing:border-box;
+      }
       .is-btn:active:not(:disabled){opacity:0.85;transform:scale(0.97);}
       .is-btn:disabled{cursor:default;opacity:0.80;}
-      .is-chrome-note{margin-top:10px;color:#000000;font-size:14px;font-weight:400;max-width:100%;line-height:1.5;}
-      .is-dots{display:inline-flex;align-items:center;gap:7px;height:1em;vertical-align:middle;}
-      .is-dots span{width:10px;height:10px;background:#1B5E42;border-radius:50%;display:inline-block;animation:is-dot-blink 1.2s infinite both;}
+      .is-chrome-note { margin-top:clamp(12px,3vw,18px);color:#000000;font-size:clamp(11px,2.8vw,16px);font-weight:400;max-width:360px;line-height:1.5; }
+      .is-dots { display:inline-flex;align-items:center;gap:clamp(5px,1.5vw,9px);height:1em;vertical-align:middle; }
+      .is-dots span {
+        width:clamp(7px,2vw,11px);height:clamp(7px,2vw,11px);background:#1B5E42;
+        border-radius:50%;display:inline-block;animation:is-dot-blink 1.2s infinite both;
+      }
       .is-dots span:nth-child(1){animation-delay:0s;}
       .is-dots span:nth-child(2){animation-delay:0.3s;}
       .is-dots span:nth-child(3){animation-delay:0.6s;}
-      @keyframes is-dot-blink{0%,80%,100%{opacity:0.15;transform:scale(0.8);}40%{opacity:1;transform:scale(1.2);}}
+      @keyframes is-dot-blink {
+        0%,80%,100%{opacity:0.15;transform:scale(0.8);}
+        40%{opacity:1;transform:scale(1.2);}
+      }
     </style>
-    <div class="is-wrap" id="is-wrap-inner">
+
+    <div class="is-wrap">
       <div class="is-identity">
         <img class="is-appicon" src="./icon-192.png" alt="App Icon" />
         <h1 class="is-title">Rahul Thakur<br>Calculator</h1>
@@ -414,84 +440,169 @@ header {
   `;
   document.body.appendChild(installScreen);
 
-  function applyZoom() {
-    var wrap = document.getElementById('is-wrap-inner');
-    if (!wrap) return;
+  // ── JS INLINE SIZING — CSS ko bypass karta hai, koi override nahi kar sakta ──
+  function applyMobileSizing() {
     var W = window.innerWidth;
-    var H = window.innerHeight;
-    if (W < 600) {
-      // Content ki natural width ~320px hai — us hisaab se zoom karo
-      var zoom = Math.min(W / 320, H / 580);
-      wrap.style.zoom = zoom;
-      wrap.style.width = Math.round(100 / zoom) + 'vw';
-      wrap.style.minHeight = Math.round(100 / zoom) + 'vh';
-    } else {
-      wrap.style.zoom = '1';
-      wrap.style.width = '100%';
-      wrap.style.minHeight = '100%';
+    if (W >= 600) return; // PC par kuch nahi karna
+    var s = installScreen;
+
+    // Wrap: padding bilkul kam — poora space content ke liye
+    var wrap = s.querySelector('.is-wrap');
+    if (wrap) {
+      wrap.style.padding = '10px 8px';
+      wrap.style.justifyContent = 'flex-start';
     }
+
+    // Identity block
+    var identity = s.querySelector('.is-identity');
+    if (identity) { identity.style.marginBottom = '14px'; identity.style.width = '100%'; }
+
+    // App icon: viewport width ka 32%
+    var icon = s.querySelector('.is-appicon');
+    if (icon) {
+      var sz = Math.round(W * 0.32) + 'px';
+      icon.style.width = sz; icon.style.height = sz;
+      icon.style.borderRadius = '24px'; icon.style.marginBottom = '10px';
+    }
+
+    // Title: viewport width ka 13%
+    var title = s.querySelector('.is-title');
+    if (title) { title.style.fontSize = Math.round(W * 0.13) + 'px'; title.style.marginBottom = '6px'; }
+
+    // Description
+    var desc = s.querySelector('.is-desc');
+    if (desc) { desc.style.fontSize = Math.round(W * 0.055) + 'px'; desc.style.maxWidth = '100%'; }
+
+    // Trust container
+    var trust = s.querySelector('.is-trust');
+    if (trust) { trust.style.gap = '8px'; trust.style.maxWidth = '100%'; trust.style.marginBottom = '12px'; }
+
+    // Trust rows
+    s.querySelectorAll('.is-trust-row').forEach(function (row) {
+      row.style.borderRadius = '14px'; row.style.padding = '11px 12px'; row.style.gap = '12px';
+    });
+
+    // Trust icons: viewport width ka 9%
+    s.querySelectorAll('.is-trust-icon').forEach(function (ic) {
+      ic.style.fontSize = Math.round(W * 0.09) + 'px';
+    });
+
+    // Trust text + subtext
+    s.querySelectorAll('.is-trust-text').forEach(function (t) {
+      t.style.fontSize = Math.round(W * 0.060) + 'px';
+      var span = t.querySelector('span');
+      if (span) { span.style.fontSize = Math.round(W * 0.048) + 'px'; span.style.marginTop = '3px'; }
+    });
+
+    // Button
+    var btn = document.getElementById('is-btn');
+    if (btn) {
+      btn.style.maxWidth = '100%';
+      btn.style.padding = Math.round(W * 0.05) + 'px ' + Math.round(W * 0.08) + 'px';
+      btn.style.fontSize = Math.round(W * 0.075) + 'px';
+    }
+
+    // Chrome note
+    var note = s.querySelector('.is-chrome-note');
+    if (note) { note.style.fontSize = Math.round(W * 0.045) + 'px'; note.style.marginTop = '8px'; note.style.maxWidth = '100%'; }
   }
 
+  // ── Display Toggle ──
   function applyMode() {
-    var isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    var isPWA = window.matchMedia('(display-mode: standalone)').matches
+                || window.navigator.standalone === true;
     if (isPWA) {
       installScreen.style.display = 'none';
-      Array.from(document.body.children).forEach(function (el) { if (el !== installScreen) el.style.display = ''; });
+      Array.from(document.body.children).forEach(function (el) {
+        if (el !== installScreen) el.style.display = '';
+      });
     } else {
       installScreen.style.display = 'block';
-      Array.from(document.body.children).forEach(function (el) { if (el !== installScreen) el.style.display = 'none'; });
-      applyZoom();
+      Array.from(document.body.children).forEach(function (el) {
+        if (el !== installScreen) el.style.display = 'none';
+      });
+      applyMobileSizing();
     }
   }
 
+  // ── Button States ──
   function setBtn(type) {
     var btn = document.getElementById('is-btn');
     if (!btn) return;
     btn.disabled = false;
-    btn.style.display = 'block';
+    btn.style.display = 'inline-block';
     if (type === 'loading') {
-      btn.disabled = true;
+      btn.disabled  = true;
       btn.innerHTML = '<span class="is-dots"><span></span><span></span><span></span></span>';
-      btn.onclick = null;
+      btn.onclick   = null;
     } else if (type === 'install') {
       btn.innerHTML = 'Install';
       btn.onclick = async function () {
         if (!deferredPrompt) return;
-        btn.disabled = true;
+        btn.disabled  = true;
         btn.innerHTML = '<span class="is-dots"><span></span><span></span><span></span></span>';
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') { deferredPrompt = null; }
-        else { btn.disabled = false; btn.innerHTML = 'Install'; }
+        if (outcome === 'accepted') {
+          deferredPrompt = null;
+        } else {
+          btn.disabled  = false;
+          btn.innerHTML = 'Install';
+        }
       };
     } else if (type === 'installed') {
       btn.innerHTML = 'App Installed ✅';
-      btn.disabled = true;
-      btn.onclick = null;
+      btn.disabled  = true;
+      btn.onclick   = null;
     } else {
       btn.innerHTML = '🔄&nbsp;&nbsp;Try Again';
-      btn.disabled = false;
-      btn.onclick = function () { window.location.reload(); };
+      btn.disabled  = false;
+      btn.onclick   = function () { window.location.reload(); };
     }
+    applyMobileSizing(); // har button change ke baad re-apply
   }
 
+  // ── Init ──
   applyMode();
   window.matchMedia('(display-mode: standalone)').addEventListener('change', applyMode);
-  window.addEventListener('resize', applyZoom);
+  window.addEventListener('resize', applyMobileSizing);
 
   const swAlreadyActive = !!(navigator.serviceWorker && navigator.serviceWorker.controller);
-  if (window._deferredPrompt) { deferredPrompt = window._deferredPrompt; window._deferredPrompt = null; }
-  if (swAlreadyActive) {
-    setBtn(deferredPrompt ? 'install' : 'installed');
-  } else {
-    var btn = document.getElementById('is-btn');
-    if (btn) btn.style.display = 'block';
-    setBtn('loading');
-    var promptTimer = setTimeout(function () { if (!deferredPrompt) setBtn('refresh'); }, 10000);
-    window.addEventListener('beforeinstallprompt', function (e) { clearTimeout(promptTimer); e.preventDefault(); deferredPrompt = e; setBtn('install'); });
+  if (window._deferredPrompt) {
+    deferredPrompt = window._deferredPrompt;
+    window._deferredPrompt = null;
   }
-  window.addEventListener('beforeinstallprompt', function (e) { if (swAlreadyActive) { e.preventDefault(); deferredPrompt = e; setBtn('install'); } });
-  window.addEventListener('appinstalled', function () { deferredPrompt = null; setBtn('installed'); });
+  if (swAlreadyActive) {
+    if (deferredPrompt) {
+      setBtn('install');
+    } else {
+      setBtn('installed');
+    }
+  } else {
+    const btn = document.getElementById('is-btn');
+    if (btn) { btn.style.display = 'inline-block'; }
+    setBtn('loading');
+    let promptTimer = setTimeout(function () {
+      if (!deferredPrompt) setBtn('refresh');
+    }, 10000);
+    window.addEventListener('beforeinstallprompt', function (e) {
+      clearTimeout(promptTimer);
+      e.preventDefault();
+      deferredPrompt = e;
+      setBtn('install');
+    });
+  }
+  window.addEventListener('beforeinstallprompt', function (e) {
+    if (swAlreadyActive) {
+      e.preventDefault();
+      deferredPrompt = e;
+      setBtn('install');
+    }
+  });
+  window.addEventListener('appinstalled', function () {
+    deferredPrompt = null;
+    setBtn('installed');
+  });
 
 })();
 </script>
