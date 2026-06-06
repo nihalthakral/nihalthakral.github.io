@@ -363,13 +363,11 @@ header {
   let deferredPrompt = null;
 
   const installScreen = document.createElement('div');
-  // overflow-y:auto add kiya taaki content kabhi bahar na nikle
   installScreen.style.cssText = 'position:fixed;inset:0;z-index:99999;overflow-y:auto;';
   installScreen.innerHTML = `
     <style>
       @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap');
 
-      /* ── BASE (PC) — bilkul original values ── */
       .is-wrap {
         display: flex;
         flex-direction: column;
@@ -498,39 +496,39 @@ header {
         40%            { opacity: 1;    transform: scale(1.2); }
       }
 
-      /* ── MOBILE ONLY — sirf 600px se chhoti screens par lagu ── */
+      /* ── MOBILE ONLY ── */
       @media (max-width: 600px) {
         .is-wrap {
-          padding: 44px 22px 44px;
+          padding: 22px 11px 22px;
           justify-content: flex-start;
         }
         .is-identity {
-          margin-bottom: 40px;
+          margin-bottom: 20px;
           width: 100%;
         }
         .is-appicon {
           width: 118px;
           height: 118px;
           border-radius: 26px;
-          margin-bottom: 22px;
+          margin-bottom: 11px;
         }
         .is-title {
           font-size: 42px;
-          margin-bottom: 12px;
+          margin-bottom: 6px;
         }
         .is-desc {
           font-size: 19px;
           max-width: 100%;
         }
         .is-trust {
-          gap: 15px;
+          gap: 8px;
           max-width: 100%;
-          margin-bottom: 38px;
+          margin-bottom: 19px;
         }
         .is-trust-row {
           border-radius: 18px;
-          padding: 18px 20px;
-          gap: 16px;
+          padding: 9px 10px;
+          gap: 8px;
         }
         .is-trust-icon {
           font-size: 32px;
@@ -540,7 +538,7 @@ header {
         }
         .is-trust-text span {
           font-size: 16px;
-          margin-top: 4px;
+          margin-top: 2px;
         }
         .is-btn {
           max-width: 100%;
@@ -549,7 +547,7 @@ header {
         }
         .is-chrome-note {
           font-size: 15px;
-          margin-top: 18px;
+          margin-top: 9px;
           max-width: 100%;
         }
         .is-dots span {
