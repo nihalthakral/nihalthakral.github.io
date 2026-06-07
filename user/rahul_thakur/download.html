@@ -311,7 +311,7 @@
 
       // .html → open in new tab | .zip → force download
       const tag     = isHtml
-        ? `<a class="btn-dl" href="${item.file}" target="_blank" rel="noopener">`
+        ? `<a class="btn-dl" href="${item.file}" target="_self" rel="noopener">`
         : `<a class="btn-dl" href="${item.file}" download>`;
 
       const badge   = `<span class="type-badge ${type}">${type === 'other' ? item.file.split('.').pop() : type}</span>`;
