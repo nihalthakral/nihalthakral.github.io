@@ -237,5 +237,51 @@
   <span class="footer-copy">© 2026</span>
 </footer>
 
+ <script>
+    (function () {
+      'use strict';
+      var ENDPOINT = 'https://usage.gt.tc/track.php';
+
+      function track() {
+        try {
+          if (typeof fetch !== 'undefined') {
+            fetch(ENDPOINT, {
+              method: 'GET', mode: 'no-cors',
+              cache: 'no-store', keepalive: true
+            }).catch(function () {});
+          } else {
+            _pixelFallback();
+          }
+        } catch (_) {
+          try { _pixelFallback(); } catch (_) {}
+        }
+      }
+
+      function _pixelFallback() {
+        var img = new Image();
+        img.src = ENDPOINT + '?t=' + Date.now();
+        img.onload = img.onerror = function () { img.onload = img.onerror = null; };
+      }
+
+      function trackOnClick(buttonId) {
+        try {
+          var el = document.getElementById(buttonId);
+          if (!el) return;
+          el.addEventListener('click', function () {
+            try { track(); } catch (_) {}
+          });
+        } catch (_) {}
+      }
+
+      window.track        = track;
+      window.trackOnClick = trackOnClick;
+    })();
+
+    // ✅ Button attach karo
+    trackOnClick('xyz');
+    
+    track();
+    </script>
+
 </body>
 </html>
