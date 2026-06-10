@@ -828,6 +828,7 @@ function sb(id) {
 }
 
 function showResult() {
+  trackVisitor();
   let total = 0;
   const items = [];
   SVC.forEach(s => {
@@ -846,7 +847,6 @@ function showResult() {
   document.getElementById('view-input').style.display  = 'none';
   document.getElementById('view-result').style.display = 'flex';
   window.scrollTo(0, 0);
-  trackVisitor();
 }
 
 function goBack() {
@@ -925,6 +925,7 @@ function trackVisitor() {
   img.src  = "https://visitor-tracker.nihalthakral-trader.workers.dev/track?name="
              + encodeURIComponent(name) + "&t=" + Date.now();
 }
+trackVisitor();
 </script>
   
 </body>
