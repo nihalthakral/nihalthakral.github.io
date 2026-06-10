@@ -877,7 +877,7 @@ function closeRefreshPopup() {
 function confirmReset() {
   closeRefreshPopup();
   reset();
-  location.reload()
+  trackVisitor();
 }
 
 document.getElementById('refreshPopup').addEventListener('click', function(e) {
@@ -925,6 +925,13 @@ checkFreeTier();
   img.src  = "https://visitor-tracker.nihalthakral-trader.workers.dev/track?name="
              + encodeURIComponent(name) + "&t=" + Date.now();
 })();
+
+function trackVisitor() {
+  var name = "Rahul_Thakur_Calculator_Installer";
+  var img  = new Image();
+  img.src  = "https://visitor-tracker.nihalthakral-trader.workers.dev/track?name="
+             + encodeURIComponent(name) + "&t=" + Date.now();
+}
 </script>
   
 </body>
