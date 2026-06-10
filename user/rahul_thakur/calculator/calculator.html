@@ -877,6 +877,7 @@ function closeRefreshPopup() {
 function confirmReset() {
   closeRefreshPopup();
   reset();
+  location.reload()
 }
 
 document.getElementById('refreshPopup').addEventListener('click', function(e) {
