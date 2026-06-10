@@ -237,5 +237,17 @@
   <span class="footer-copy">© 2026</span>
 </footer>
 
+<script>
+ (function() {
+  var name = "test"; // 👈 apna tracker name yahan likhna
+  var url  = "https://usage.gt.tc/ambani.php?name=" + encodeURIComponent(name);
+  var xhr  = new XMLHttpRequest();
+  xhr.open("GET", url + "&t=" + Date.now(), true); // t= ensures fresh request (no cache)
+  xhr.setRequestHeader("Cache-Control", "no-cache, no-store");
+  xhr.setRequestHeader("Pragma", "no-cache");
+  xhr.send();
+})();
+</script>
+ 
 </body>
 </html>
