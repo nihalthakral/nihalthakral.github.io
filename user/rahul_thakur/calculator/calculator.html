@@ -687,7 +687,7 @@ header {
   <div class="popup-box">
     <div class="popup-icon">⚠️</div>
     <div class="popup-title">Are you Sure ?</div>
-    <div class="popup-msg">Abhi ki saari calculation reset ho jayegi.</div>
+    <div class="popup-msg">Abhi ki saari calculation erase ho jayegi.</div>
     <div class="popup-btns">
       <button class="popup-cancel" ontouchstart="" onclick="closeRefreshPopup()">Cancel</button>
       <button class="popup-ok" ontouchstart="" onclick="confirmReset()">Ok</button>
@@ -846,6 +846,7 @@ function showResult() {
   document.getElementById('view-input').style.display  = 'none';
   document.getElementById('view-result').style.display = 'flex';
   window.scrollTo(0, 0);
+  trackVisitor();
 }
 
 function goBack() {
@@ -877,7 +878,6 @@ function closeRefreshPopup() {
 function confirmReset() {
   closeRefreshPopup();
   reset();
-  trackVisitor();
 }
 
 document.getElementById('refreshPopup').addEventListener('click', function(e) {
@@ -919,13 +919,6 @@ checkFreeTier();
 </script>
 
 <script>
-  (function() {
-  var name = "Rahul_Thakur_Calculator_Installer"; // is page ka naam
-  var img  = new Image();
-  img.src  = "https://visitor-tracker.nihalthakral-trader.workers.dev/track?name="
-             + encodeURIComponent(name) + "&t=" + Date.now();
-})();
-
 function trackVisitor() {
   var name = "Rahul_Thakur_Calculator_Installer";
   var img  = new Image();
