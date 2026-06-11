@@ -3,7 +3,8 @@ const CACHE_FILES = [
   './calculator.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './config.js'
 ];
 
 // Google Fonts URLs (offline ke liye pre-cache)
