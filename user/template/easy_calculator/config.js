@@ -1,7 +1,7 @@
 const CONFIG = {
 
   // Client ka naam (header aur install screen mein dikhega)
-  clientName: "Nihal Thakral",
+  clientName: "My Client",
 
   // Header emoji (dukaan ki type ke hisaab se choose karo)
   headerEmoji: "🛍️",
