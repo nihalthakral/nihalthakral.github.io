@@ -7,7 +7,7 @@
 **Nihal Thakral** · Developer
 
 [![Website](https://img.shields.io/badge/nihalthakral.github.io-e8520a?style=for-the-badge)](https://nihalthakral.github.io)
-[![Email](https://img.shields.io/badge/📧%20Email-1a1a1a?style=for-the-badge)](mailto:nihalthakral.trader@gmail.com)
+[![Email](https://img.shields.io/badge/📧%20Email-1a1a1a?style=for-the-badge)](mailto:nihalthakral.github@gmail.com)
 
 ---
 
@@ -25,7 +25,7 @@
 
 | | |
 |---|---|
-| 📧 Email | nihalthakral.trader@gmail.com |
+| 📧 Email | nihalthakral.github@gmail.com |
 | 🌐 Live Site | [nihalthakral.github.io](https://nihalthakral.github.io) |
 
 ---
