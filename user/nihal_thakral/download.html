@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Downloads — Nihal Thakral</title>
+<meta name="google" content="notranslate" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: #FAF9F7;
+    color: #1a1a1a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* NAV */
+  nav {
+    padding: 1.6rem 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ebebeb;
+  }
+  .nav-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.01em;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 4rem 7% 3rem;
+    text-align: left;
+  }
+  .hero-title-orange {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(4.5rem, 16vw, 14rem);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: #E8520A;
+    display: block;
+  }
+  .hero-title-black {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(4.5rem, 16vw, 14rem);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: #000000;
+    display: block;
+    margin-top: 0.05em;
+  }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid #ebebeb; margin: 0; }
+
+  /* TABLE SECTION */
+  .table-section {
+    padding: 3rem 7% 5rem;
+    flex: 1;
+  }
+
+  .software-count {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #bbb;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .table-wrap {
+    width: 100%;
+    border: 1px solid #e8e6e3;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    border-bottom: 1px solid #e8e6e3;
+    background: #f7f6f4;
+  }
+  thead th {
+    padding: 0.85rem 1.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #aaa;
+    text-align: left;
+  }
+  thead th:last-child { text-align: right; }
+
+  tbody tr {
+    border-bottom: 1px solid #f0efed;
+    transition: background 0.15s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #faf9f7; }
+
+  tbody td {
+    padding: 1.1rem 1.4rem;
+    vertical-align: middle;
+  }
+
+  .software-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: #fff1ec;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.85rem;
+    flex-shrink: 0;
+  }
+  .software-icon svg { width: 17px; height: 17px; color: #E8520A; }
+
+  .name-cell {
+    display: flex;
+    align-items: center;
+  }
+  .software-name {
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.01em;
+  }
+  .software-file {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: #bbb;
+    margin-top: 0.15rem;
+    font-weight: 400;
+  }
+
+  .type-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.22rem 0.6rem;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .type-badge.html { background: #e8f4fd; color: #2a7bbf; }
+  .type-badge.zip  { background: #edf7ed; color: #2d7a3a; }
+  .type-badge.other { background: #f0efed; color: #888; }
+
+  .action-cell { text-align: right; }
+
+  .btn-dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1.2rem;
+    background: #E8520A;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.1s;
+    letter-spacing: 0.01em;
+  }
+  .btn-dl:hover  { background: #d04708; }
+  .btn-dl:active { transform: scale(0.97); }
+  .btn-dl svg { width: 14px; height: 14px; }
+
+  /* EMPTY STATE */
+  .empty {
+    padding: 4rem 1.4rem;
+    text-align: center;
+    color: #bbb;
+    font-size: 0.92rem;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 1.8rem 7%;
+    border-top: 1px solid #ebebeb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-name { font-size: 0.85rem; color: #aaa; }
+  .footer-copy  { font-size: 0.82rem; color: #bbb; }
+
+  @media (max-width: 640px) {
+    nav { padding: 1.2rem 5%; }
+    .hero { padding: 3rem 5% 2.5rem; }
+    .table-section { padding: 2rem 5% 4rem; }
+    footer { padding: 1.5rem 5%; }
+    thead th:nth-child(2) { display: none; }
+    tbody td:nth-child(2) { display: none; }
+    .software-file { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-name">Nihal Thakral</span>
+  <div style="display:flex;align-items:center;gap:0.75rem;"><a href="../../index.html" style="display:inline-flex;align-items:center;gap:0.45rem;font-size:0.85rem;font-weight:600;color:#fff;background:#E8520A;text-decoration:none;padding:0.45rem 1rem;border-radius:8px;transition:background 0.18s;" onmouseover="this.style.background='#d04708'" onmouseout="this.style.background='#E8520A'"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>Back</a></div>
+</nav>
+
+<section class="hero">
+  <span class="hero-title-orange">Download</span>
+  <span class="hero-title-black">Software</span>
+</section>
+
+<hr class="divider">
+
+<section class="table-section">
+  <p class="software-count" id="softwareCount"></p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Software</th>
+          <th>Type</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-name">nihalthakral.trader@gmail.com</span>
+  <span class="footer-copy">© 2026</span>
+</footer>
+
+<script src="config.js"></script>
+
+<script>
+   // ── Auto-detect current folder name as ID ──
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const folderId  = pathParts.length >= 2 ? pathParts[pathParts.length - 2] : '—';
+
+  // ── Helper: detect file type ──
+  function getType(file) {
+    const ext = file.split('.').pop().toLowerCase();
+    if (ext === 'html' || ext === 'htm') return 'html';
+    if (ext === 'zip')                   return 'zip';
+    return 'other';
+  }
+
+  // ── Build table ──
+  const tbody = document.getElementById('tableBody');
+  const count = document.getElementById('softwareCount');
+
+  if (SOFTWARE.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3"><div class="empty">Koi software available nahi hai abhi.</div></td></tr>`;
+    count.textContent = '0 software';
+  } else {
+    count.textContent = SOFTWARE.length + ' software available';
+
+    SOFTWARE.forEach(item => {
+      const type    = getType(item.file);
+      const isHtml  = type === 'html';
+
+      // .html → open in new tab | .zip → force download
+      const tag     = isHtml
+        ? `<a class="btn-dl" href="${item.file}" target="_self" rel="noopener">`
+        : `<a class="btn-dl" href="${item.file}" download>`;
+
+      const badge   = `<span class="type-badge ${type}">${type === 'other' ? item.file.split('.').pop() : type}</span>`;
+
+      const iconSvg = isHtml
+        ? `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`
+        : `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+
+      tbody.innerHTML += `
+        <tr>
+          <td>
+            <div class="name-cell">
+              <div class="software-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+              </div>
+              <div>
+                <div class="software-name">${item.name}</div>
+                <div class="software-file">${item.file}</div>
+              </div>
+            </div>
+          </td>
+          <td>${badge}</td>
+          <td class="action-cell">
+            ${tag}
+              ${iconSvg}
+              Download
+            </a>
+          </td>
+        </tr>`;
+    });
+  }
+</script>
+ 
+</body>
+</html>
