@@ -1,10 +1,10 @@
 const CACHE_NAME = 'calc-v1';
 const CACHE_FILES = [
   './calculator.html',
+  './config.js',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png',
-  './config.js'
+  './icon-512.png'
 ];
 
 // Google Fonts URLs (offline ke liye pre-cache)
