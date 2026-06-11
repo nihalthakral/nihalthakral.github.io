@@ -2,10 +2,6 @@
 
 <div align="center">
 
-```
-🅿🆁🅾🅱🅻🅴🅼 🆂🅾🅻🆅🅴🆁
-```
-
 # *Problem* Solver
 
 **Nihal Thakral** · Developer
