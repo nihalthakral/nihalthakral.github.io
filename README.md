@@ -13,14 +13,6 @@
 
 </div>
 
-## 📌 Repository
-
-**`nihalthakral.github.io`** source code — GitHub personal site.
-
-
----
-
-
 ## 📬 Contact
 
 | | |
