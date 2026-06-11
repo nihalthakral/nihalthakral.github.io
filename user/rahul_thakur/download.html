@@ -255,36 +255,10 @@
   <span class="footer-copy">© 2026</span>
 </footer>
 
+<script src="config.js"></script>
+
 <script>
-  /* =====================================================
-     ✏️  SIRF YAHAN CHANGES KARO — BAAKI KUCH MAT CHHUO
-     =====================================================
-
-     FORMAT:
-       { file: "filename", name: "Display Name" }
-
-     RULES:
-       • .html file  → browser mein open hogi (new tab)
-       • .zip  file  → download hogi automatically
-       • Button hamesha "Download" dikhega
-
-     EXAMPLE:
-       { file: "calculator.html",  name: "Smart Calculator"  },
-       { file: "billing.zip",      name: "Billing Manager"   },
-
-  ===================================================== */
-  const SOFTWARE = [
-    { file: "easy_calculator/calculator.html",   name: "Easy Calculator"   },
-    { file: "gmail_checker/Gmail_Notification_Software.crx",   name: "Gmail Notification Software"   }
-  ];
-  /* ===================================================
-     ✅  BAS — UPAR LIST EDIT KARO, NEECHE MAT JAO
-  =================================================== */
-
-
-
-
-  // ── Auto-detect current folder name as ID ──
+   // ── Auto-detect current folder name as ID ──
   const pathParts = window.location.pathname.split('/').filter(Boolean);
   const folderId  = pathParts.length >= 2 ? pathParts[pathParts.length - 2] : '—';
 
