@@ -1,3 +1,3 @@
 const SOFTWARE = [
-    { file: "Always_Open_Whatsapp_Software.crx",   name: "Always Open Whatsapp Software"   }
+    { file: "Gmail_Notification_Software.crx",   name: "Gmail Notification Software"   }
   ];
