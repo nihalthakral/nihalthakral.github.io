@@ -90,6 +90,14 @@ header {
   height: 100%;
   gap: 1vh;
 }
+#cards-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
 #view-result {
   display: none;
   flex-direction: column;
@@ -99,8 +107,8 @@ header {
 
 /* ── SERVICE CARD ── */
 .scard {
-  flex: 1;
-  min-height: 0;
+  flex-shrink: 0;
+  min-height: 17vh;
   background: var(--surface);
   border-radius: 2vh;
   border: 2px solid var(--border);
@@ -358,7 +366,6 @@ header {
   ✏️  SIRF YAHAN CHANGE KARO — BAAKI KUCH MAT CHHEYNA
   ============================================================ -->
 <script src="config.js"></script>
-  
 <!-- ============================================================
   UPAR TAK HI CHANGE KARNA HAI — NEECHE KUCH MAT CHHEYNA
   ============================================================ -->
@@ -449,7 +456,7 @@ header {
           <div class="is-trust-text">Size = Less than 1 MB<span>Install in Few Seconds</span></div>
         </div>
       </div>
-      <button id="is-btn" class="is-btn">?</button> <br>
+      <button id="is-btn" class="is-btn">?</button>
       <button type="button" class="is-btn" style="display:inline-block" onclick="window.location.href='/index.html';">Cancel</button>
       <p class="is-chrome-note">Directly Install from Google Chrome</p>
     </div>
@@ -607,7 +614,9 @@ header {
 
 <div class="scroll">
   <div id="view-input">
-    <!-- Service cards yahan JS se generate honge -->
+    <div id="cards-container">
+      <!-- Service cards yahan JS se generate honge -->
+    </div>
     <button class="calcbtn" ontouchstart="" onclick="showResult()">Confirm</button>
   </div>
   <div id="view-result">
@@ -633,8 +642,8 @@ document.getElementById('htitle').innerHTML  = CONFIG.clientName + ' <br> Calcul
 
 /* ── Service cards dynamically generate karo ── */
 const Q = {};
-const inputView  = document.getElementById('view-input');
-const confirmBtn = inputView.querySelector('.calcbtn');
+const inputView      = document.getElementById('view-input');
+const cardsContainer = document.getElementById('cards-container');
 
 var _emojiColors = ['ec','es','ecp','eph'];
 CONFIG.services.forEach(function(s, i) {
@@ -655,7 +664,7 @@ CONFIG.services.forEach(function(s, i) {
       '<input class="qinp" type="number" inputmode="numeric" min="0" max="999" id="q-' + s.id + '" value="0" oninput="sq(\'' + s.id + '\',this.value)" onblur="sb(\'' + s.id + '\')" onfocus="sf(\'' + s.id + '\')" disabled>' +
       '<button class="qbtn" ontouchstart="ch(event,\'' + s.id + '\',1);startHold(\'' + s.id + '\',1)" ontouchend="endHold()" ontouchcancel="endHold()" onclick="return false">+</button>' +
     '</div>';
-  inputView.insertBefore(card, confirmBtn);
+  cardsContainer.appendChild(card);
 });
 
 /* ── HOLD-TO-REPEAT ── */
