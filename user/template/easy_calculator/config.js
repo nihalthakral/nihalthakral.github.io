@@ -23,6 +23,8 @@ const CONFIG = {
     { id: "6", emoji: "🖨️", name: "Saada Printout",    rate: 5,  unit: "page"  },
     { id: "7", emoji: "🌈", name: "Colored Printout",  rate: 10, unit: "page"  },
     { id: "8", emoji: "🎨", name: "Colored Photocopy", rate: 10, unit: "page"  },
+    { id: "9", emoji: "🌈", name: "Colored Printout",  rate: 10, unit: "page"  },
+    { id: "10", emoji: "🎨", name: "Colored Photocopy", rate: 10, unit: "page"  }
   ]
 
 };
