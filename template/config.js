@@ -1,3 +1,3 @@
 const SOFTWARE = [
-    { file: "location",   name: "Name"   }
+    { file: "location",   name: "name"   }
   ];
