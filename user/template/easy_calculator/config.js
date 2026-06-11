@@ -7,7 +7,7 @@ const CONFIG = {
   headerEmoji: "🛍️",
 
   // Free trial khatam hone ki date — format: "YYYY-MM-DD"
-  expiryDate: "2007-10-14",
+  expiryDate: "2999-10-14",
 
   // Tracker naam — spaces ki jagah _ use karo
   trackerName: "tracker",
