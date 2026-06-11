@@ -1,7 +1,7 @@
 const CONFIG = {
 
   // Client ka naam (header aur install screen mein dikhega)
-  clientName: "Nihal Thakral",
+  clientName: "Neeti BFF",
 
   // Header emoji (dukaan ki type ke hisaab se choose karo)
   headerEmoji: "🛍️",
@@ -19,6 +19,10 @@ const CONFIG = {
     { id: "2", emoji: "🖨️", name: "Saada Printout",    rate: 5,  unit: "page"  },
     { id: "3", emoji: "🌈", name: "Colored Printout",  rate: 10, unit: "page"  },
     { id: "4", emoji: "🎨", name: "Colored Photocopy", rate: 10, unit: "page"  },
+    { id: "5", emoji: "📄", name: "Photo Copy",        rate: 3,  unit: "page"  },
+    { id: "6", emoji: "🖨️", name: "Saada Printout",    rate: 5,  unit: "page"  },
+    { id: "7", emoji: "🌈", name: "Colored Printout",  rate: 10, unit: "page"  },
+    { id: "8", emoji: "🎨", name: "Colored Photocopy", rate: 10, unit: "page"  },
   ]
 
 };
