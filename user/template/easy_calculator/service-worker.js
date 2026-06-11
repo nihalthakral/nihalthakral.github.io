@@ -6,13 +6,11 @@ const CACHE_FILES = [
   './icon-192.png',
   './icon-512.png'
 ];
-
 // Google Fonts URLs (offline ke liye pre-cache)
 const FONT_URLS = [
   'https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap',
   'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;800&display=swap'
 ];
-
 // Install: files + fonts cache karo
 self.addEventListener('install', function(e) {
   e.waitUntil(
@@ -30,7 +28,6 @@ self.addEventListener('install', function(e) {
     })
   );
 });
-
 // Activate: purane caches hata do
 self.addEventListener('activate', function(e) {
   e.waitUntil(
@@ -42,16 +39,14 @@ self.addEventListener('activate', function(e) {
   );
   self.clients.claim();
 });
-
 // Fetch strategy:
 // - HTML (navigate)  : Network-first → cache fallback
+// - config.js        : Network-first → cache fallback (taaki update turant mile)
 // - Fonts (Google)   : Cache-first → network fallback
 // - Baaki assets     : Cache-first → network fallback
 self.addEventListener('fetch', function(e) {
   if (e.request.method !== 'GET') return;
-
   const url = e.request.url;
-
   // HTML: hamesha network se lo taaki changes turant dikhen
   if (e.request.mode === 'navigate') {
     e.respondWith(
@@ -67,7 +62,21 @@ self.addEventListener('fetch', function(e) {
     );
     return;
   }
-
+  // config.js: hamesha network se lo taaki update turant mile
+  if (url.includes('config.js')) {
+    e.respondWith(
+      fetch(e.request).then(function(response) {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(function(cache) {
+          cache.put(e.request, clone);
+        });
+        return response;
+      }).catch(function() {
+        return caches.match(e.request);
+      })
+    );
+    return;
+  }
   // Google Fonts: cache-first (fonts kabhi change nahi hote)
   if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
     e.respondWith(
@@ -86,7 +95,6 @@ self.addEventListener('fetch', function(e) {
     );
     return;
   }
-
   // Baaki sab (icons, manifest): cache-first
   e.respondWith(
     caches.match(e.request).then(function(cached) {
