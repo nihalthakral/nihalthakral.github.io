@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="hi" translate="no">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=980, user-scalable=no, viewport-fit=cover" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>Easy Calculator</title>
+<meta name="google" content="notranslate" />
+<meta http-equiv="Content-Language" content="hi" />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #EFEDE8;
+  --surface: #FFFFFF;
+  --surface2:#E8E5DF;
+  --accent:  #1B5E42;
+  --text:    #111110;
+  --text2:   #6A6560;
+  --border:  #C8C3BC;
+}
+
+html {
+  height: 100dvh;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  -webkit-text-size-adjust: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* ── HEADER ── */
+header {
+  flex-shrink: 0;
+  width: 100%;
+  background: var(--accent);
+  padding: calc(env(safe-area-inset-top, 0px) + 1.5vh) 14px 1.5vh;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hicon {
+  width: 11vh; height: 11vh;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.15);
+  border-radius: 1.5vh;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8vh;
+  transition: font-size 0.3s ease;
+}
+.htext h1 {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 5vh;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.3px;
+  line-height: 1.1;
+  transition: opacity 0.25s ease;
+}
+
+/* ── SCROLL / CONTENT AREA ── */
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  width: 100%;
+  padding: 1.2vh 14px calc(env(safe-area-inset-bottom, 0px) + 1.5vh);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── VIEW CONTAINERS ── */
+#view-input {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1vh;
+}
+#view-result {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  gap: 1.2vh;
+}
+
+/* ── SERVICE CARD ── */
+.scard {
+  flex: 1;
+  min-height: 0;
+  background: var(--surface);
+  border-radius: 2vh;
+  border: 2px solid var(--border);
+  padding: 1.2vh 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.8vh;
+  transition: border-color .15s;
+}
+
+.stop { display: flex; align-items: center; }
+.sinfo { display: flex; align-items: center; gap: 1.5vh; }
+.semoji {
+  width: 5.5vh; height: 5.5vh;
+  border-radius: 1.2vh;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3.8vh;
+}
+.ec  { background: #E6F4EA; }
+.es  { background: #E3EFFE; }
+.ecp { background: #FFF4E0; }
+.eph { background: #FDEAEA; }
+
+.sname { font-size: 3vh;   font-weight: 700; line-height: 1.2; }
+.srate { font-size: 2.5vh; color: var(--text2); margin-top: 0.3vh; font-weight: 600; font-family: Arial, sans-serif; }
+
+/* ── QTY ROW ── */
+.qrow { display: flex; width: 100%; height: 7vh; }
+
+.qbtn {
+  width: 9vh; height: 100%;
+  flex-shrink: 0;
+  border: 3px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 5vh; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; user-select: none;
+  transition: background .08s, transform .07s;
+  font-family: 'DM Sans', sans-serif; font-weight: 700;
+}
+.qbtn:first-child { border-radius: 1.5vh 0 0 1.5vh; border-right: none; }
+.qbtn:last-child  { border-radius: 0 1.5vh 1.5vh 0; border-left:  none; }
+.qbtn:active { background: #CFCBC4; transform: scale(.90); }
+
+.qinp {
+  height: 100%; width: 100%;
+  border: 2px solid var(--border); border-left: none; border-right: none;
+  background: var(--surface); color: var(--text);
+  font-size: 5vh; font-family: 'Baloo 2', sans-serif; font-weight: 1000;
+  text-align: center; outline: none; -moz-appearance: textfield;
+  touch-action: manipulation;
+  user-select: text; -webkit-user-select: text;
+}
+.qinp::-webkit-inner-spin-button,
+.qinp::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+/* ── CONFIRM BUTTON ── */
+.calcbtn {
+  flex-shrink: 0;
+  width: 100%; height: 11vh;
+  border: none; border-radius: 2vh;
+  background: var(--accent); color: #fff;
+  font-size: 4vh; font-weight: 700; font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; user-select: none;
+  transition: opacity .08s, transform .07s;
+  letter-spacing: 0.2px;
+}
+.calcbtn:active { opacity: .85; transform: scale(.98); }
+
+/* ── SUMMARY CARD ── */
+.sumcard {
+  flex: 1;
+  min-height: 0;
+  background: var(--surface);
+  border-radius: 2vh;
+  border: 2px solid var(--border);
+  padding: 2.5vh 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.bkrow {
+  display: flex; justify-content: space-between;
+  font-size: 2vh; color: var(--text2);
+  padding: 0.7vh 0; font-weight: 400;
+  font-family: Arial, sans-serif;
+}
+.bkrow span:last-child { font-weight: 600; color: var(--text); font-size: 2vh; }
+.dvdr { border: none; border-top: 2px dashed var(--border); margin: 1.5vh 0; }
+
+.frow {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--accent);
+  border-radius: 1.5vh;
+  padding: 2vh 18px; margin-top: 0.8vh;
+}
+.flbl { font-size: 4.5vh; font-weight: 700; color: rgba(255,255,255,.80); }
+.fval { font-family: 'Baloo 2', sans-serif; font-size: 4.5vh; font-weight: 800; color: #fff; line-height: 1; }
+
+/* ── EDIT BUTTON ── */
+.ebtn {
+  flex-shrink: 0;
+  width: 100%; height: 11vh;
+  border: none; border-radius: 2vh;
+  background: #C0392B; color: #fff;
+  font-size: 4vh; font-weight: 700; font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; user-select: none;
+  transition: opacity .08s, transform .07s;
+}
+.ebtn:active { opacity: .85; transform: scale(.98); }
+
+/* ── REFRESH BUTTON ── */
+.rbtn {
+  flex-shrink: 0;
+  width: 100%; height: 11vh;
+  border: 2px solid var(--border); border-radius: 2vh;
+  background: var(--surface); color: var(--text2);
+  font-size: 4vh; font-weight: 700; font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; user-select: none;
+  transition: background .08s, transform .07s, color .08s;
+}
+.rbtn:active { background: #D0CCC5; color: var(--text); transform: scale(.98); }
+
+/* ── CONFIRMATION POPUP ── */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.popup-overlay.show {
+  display: flex;
+}
+.popup-box {
+  background: var(--surface);
+  border-radius: 36px;
+  border: 2px solid var(--border);
+  padding: 60px 52px 48px;
+  width: 100%;
+  max-width: 860px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+  animation: popIn 0.18s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+.popup-icon {
+  font-size: 120px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.popup-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 54px;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 18px;
+}
+.popup-msg {
+  font-size: 36px;
+  color: var(--text2);
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 52px;
+}
+.popup-btns {
+  display: flex;
+  gap: 24px;
+}
+.popup-cancel {
+  flex: 1;
+  height: 120px;
+  border: 2px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 40px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background .08s, transform .07s;
+}
+.popup-cancel:active { background: #CFCBC4; transform: scale(.96); }
+.popup-ok {
+  flex: 1;
+  height: 120px;
+  border: none;
+  border-radius: 24px;
+  background: #C0392B;
+  color: #fff;
+  font-size: 40px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: opacity .08s, transform .07s;
+}
+.popup-ok:active { opacity: .85; transform: scale(.96); }
+
+@media screen and (max-width: 360px) {
+  .popup-box { padding: 40px 28px 34px; }
+  .popup-title { font-size: 42px; }
+  .popup-msg { font-size: 28px; }
+  .popup-cancel, .popup-ok { height: 96px; font-size: 32px; }
+}
+</style>
+
+<meta name="theme-color" content="#FAF9F7">
+<link rel="manifest" href="manifest.json">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(() => console.log('SW registered'))
+      .catch(err => console.log('SW error:', err));
+  }
+</script>
+
+<script>
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    window._deferredPrompt = e;
+  });
+</script>
+
+</head>
+<body>
+
+<!-- ============================================================
+  ✏️  SIRF YAHAN CHANGE KARO — BAAKI KUCH MAT CHHEYNA
+  ============================================================ -->
+<script src="config.js"></script>
+  
+<!-- ============================================================
+  UPAR TAK HI CHANGE KARNA HAI — NEECHE KUCH MAT CHHEYNA
+  ============================================================ -->
+
+
+<script>
+(function () {
+
+  var vp = document.querySelector('meta[name="viewport"]');
+  if (!vp) {
+    vp = document.createElement('meta');
+    vp.name = 'viewport';
+    (document.head || document.documentElement).insertBefore(vp, (document.head || document.documentElement).firstChild);
+  }
+  vp.content = 'width=device-width, initial-scale=1.0, minimum-scale=1.0';
+
+  let deferredPrompt = null;
+
+  const installScreen = document.createElement('div');
+  installScreen.style.cssText = 'position:fixed;inset:0;z-index:99999;overflow:hidden;';
+  installScreen.innerHTML = `
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap');
+      .is-wrap {
+        display:flex;flex-direction:column;align-items:center;
+        height:100%;overflow:hidden;justify-content:space-evenly;
+        background:#FAF9F7;font-family:'DM Sans',sans-serif;
+        text-align:center;padding:min(3vw,2.5vh) min(6vw,4vh);box-sizing:border-box;gap:0;
+      }
+      .is-identity { display:flex;flex-direction:column;align-items:center;margin:0; }
+      .is-appicon {
+        width:min(clamp(80px,28vw,200px),22vh);height:min(clamp(80px,28vw,200px),22vh);
+        border-radius:clamp(16px,5vw,28px);margin-bottom:min(clamp(10px,3vw,24px),2vh);
+        background:rgba(255,255,255,0.12);flex-shrink:0;
+      }
+      .is-title { color:#E8520A;font-size:min(clamp(24px,9vw,100px),8vh);font-weight:1000;margin:0 0 min(clamp(6px,2vw,12px),1vh);letter-spacing:-0.5px;line-height:1.1; }
+      .is-desc { color:rgba(255,255,255,0.72);font-size:min(clamp(14px,4.5vw,22px),3.5vh);font-weight:500;line-height:1.4;max-width:420px; }
+      .is-trust { display:flex;flex-direction:column;gap:min(clamp(8px,2vw,16px),1.5vh);width:100%;max-width:420px;margin:0; }
+      .is-trust-row {
+        display:flex;align-items:center;gap:min(clamp(10px,2.5vw,16px),2vh);
+        background:rgba(255,255,255,0.10);border-radius:clamp(12px,3vw,18px);
+        padding:min(clamp(10px,2.5vw,16px),1.8vh) clamp(14px,3.5vw,22px);text-align:left;
+      }
+      .is-trust-icon { font-size:min(clamp(20px,6vw,30px),4vh);flex-shrink:0;line-height:1; }
+      .is-trust-text { color:#000000;font-size:min(clamp(15px,4.2vw,20px),3vh);font-weight:600;line-height:1.3; }
+      .is-trust-text span { display:block;color:#000000;font-size:min(clamp(12px,3.2vw,16px),2.5vh);font-weight:400;margin-top:2px; }
+      .is-btn {
+        display:none;width:100%;max-width:420px;background:#E8520A;color:#FAF9F7;
+        border:none;border-radius:100px;padding:min(clamp(15px,4.5vw,22px),2.5vh) clamp(32px,8vw,56px);
+        font-size:min(clamp(19px,5.5vw,26px),4.5vh);font-weight:800;font-family:'DM Sans',sans-serif;
+        cursor:pointer;transition:opacity 0.15s,transform 0.15s;letter-spacing:0.2px;
+        box-shadow:0 4px 20px rgba(0,0,0,0.20);box-sizing:border-box;
+        min-height:min(clamp(52px,13vw,68px),9vh);flex-shrink:0;-webkit-tap-highlight-color:transparent;
+      }
+      .is-btn:active:not(:disabled){opacity:0.85;transform:scale(0.97);}
+      .is-btn:disabled{cursor:default;opacity:0.80;}
+      .is-chrome-note { margin:0;color:#000000;font-size:min(clamp(12px,3.5vw,16px),2.5vh);font-weight:400;max-width:360px;line-height:1.5; }
+      .is-dots { display:inline-flex;align-items:center;gap:clamp(5px,1.5vw,9px);height:1em;vertical-align:middle; }
+      .is-dots span {
+        width:clamp(7px,2vw,11px);height:clamp(7px,2vw,11px);background:#1B5E42;
+        border-radius:50%;display:inline-block;animation:is-dot-blink 1.2s infinite both;
+      }
+      .is-dots span:nth-child(1){animation-delay:0s;}
+      .is-dots span:nth-child(2){animation-delay:0.3s;}
+      .is-dots span:nth-child(3){animation-delay:0.6s;}
+      @keyframes is-dot-blink {
+        0%,80%,100%{opacity:0.15;transform:scale(0.8);}
+        40%{opacity:1;transform:scale(1.2);}
+      }
+    </style>
+    <div class="is-wrap">
+      <div class="is-identity">
+        <img class="is-appicon" src="./icon-192.png" alt="App Icon" />
+        <h1 class="is-title">${CONFIG.clientName}<br>Calculator</h1>
+        <p class="is-desc">Do Maths easily without any mistake.</p>
+      </div>
+      <div class="is-trust">
+        <div class="is-trust-row">
+          <div class="is-trust-icon">❌</div>
+          <div class="is-trust-text">Use without Internet<span>one time installation</span></div>
+        </div>
+        <div class="is-trust-row">
+          <div class="is-trust-icon">🔒</div>
+          <div class="is-trust-text">No Data Collect<span>No Account, No Login</span></div>
+        </div>
+        <div class="is-trust-row">
+          <div class="is-trust-icon">⬇️</div>
+          <div class="is-trust-text">Size = Less than 1 MB<span>Install in Few Seconds</span></div>
+        </div>
+      </div>
+      <button id="is-btn" class="is-btn">?</button>
+      <button type="button" class="is-btn" style="display:inline-block" onclick="window.location.href='/index.html';">Cancel</button>
+      <p class="is-chrome-note">Directly Install from Google Chrome</p>
+    </div>
+  `;
+  document.body.appendChild(installScreen);
+
+  function fitToViewport() {
+    var wrap = installScreen.querySelector('.is-wrap');
+    if (!wrap) return;
+    wrap.style.zoom = '1';
+    requestAnimationFrame(function () {
+      var contentH = wrap.scrollHeight;
+      var screenH  = window.innerHeight;
+      if (contentH > screenH) {
+        wrap.style.zoom = String(screenH / contentH);
+      }
+    });
+  }
+
+  function applyMobileSizing() {
+    var W  = window.innerWidth;
+    var H  = window.innerHeight;
+    if (W >= 900) { requestAnimationFrame(fitToViewport); return; }
+    var s  = installScreen;
+    var VM = Math.min(W, H);
+    var wrap = s.querySelector('.is-wrap');
+    if (wrap) { wrap.style.zoom = '1'; wrap.style.padding = Math.round(VM * 0.025) + 'px ' + Math.round(W * 0.04) + 'px'; }
+    var identity = s.querySelector('.is-identity');
+    if (identity) { identity.style.margin = '0'; }
+    var icon = s.querySelector('.is-appicon');
+    if (icon) {
+      var sz = Math.round(Math.min(W * 0.28, H * 0.21)) + 'px';
+      icon.style.width = sz; icon.style.height = sz;
+      icon.style.borderRadius = '22px';
+      icon.style.marginBottom = Math.round(VM * 0.022) + 'px';
+    }
+    var title = s.querySelector('.is-title');
+    if (title) { title.style.fontSize = Math.round(Math.min(W * 0.10, H * 0.072)) + 'px'; title.style.marginBottom = Math.round(VM * 0.010) + 'px'; }
+    var desc = s.querySelector('.is-desc');
+    if (desc) { desc.style.fontSize = Math.round(Math.min(W * 0.048, H * 0.036)) + 'px'; desc.style.maxWidth = '100%'; }
+    var trust = s.querySelector('.is-trust');
+    if (trust) { trust.style.gap = Math.round(VM * 0.016) + 'px'; trust.style.maxWidth = '100%'; trust.style.margin = '0'; }
+    s.querySelectorAll('.is-trust-row').forEach(function (row) {
+      row.style.borderRadius = '14px';
+      row.style.padding = Math.round(Math.min(W * 0.026, H * 0.018)) + 'px ' + Math.round(W * 0.034) + 'px';
+      row.style.gap = Math.round(VM * 0.024) + 'px';
+    });
+    s.querySelectorAll('.is-trust-icon').forEach(function (ic) { ic.style.fontSize = Math.round(Math.min(W * 0.078, H * 0.056)) + 'px'; });
+    s.querySelectorAll('.is-trust-text').forEach(function (t) {
+      t.style.fontSize = Math.round(Math.min(W * 0.054, H * 0.038)) + 'px';
+      var span = t.querySelector('span');
+      if (span) { span.style.fontSize = Math.round(Math.min(W * 0.043, H * 0.030)) + 'px'; span.style.marginTop = '2px'; }
+    });
+    var btn = document.getElementById('is-btn');
+    if (btn) {
+      btn.style.maxWidth   = '100%';
+      btn.style.padding    = Math.round(Math.min(W * 0.042, H * 0.028)) + 'px ' + Math.round(W * 0.08) + 'px';
+      btn.style.fontSize   = Math.round(Math.min(W * 0.066, H * 0.048)) + 'px';
+      btn.style.minHeight  = Math.round(Math.min(W * 0.125, H * 0.090)) + 'px';
+    }
+    var note = s.querySelector('.is-chrome-note');
+    if (note) { note.style.fontSize = Math.round(Math.min(W * 0.038, H * 0.028)) + 'px'; note.style.margin = '0'; note.style.maxWidth = '100%'; }
+    requestAnimationFrame(fitToViewport);
+  }
+
+  function applyMode() {
+    var isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (isPWA) {
+      installScreen.style.display = 'none';
+      Array.from(document.body.children).forEach(function (el) { if (el !== installScreen) el.style.display = ''; });
+    } else {
+      installScreen.style.display = 'block';
+      Array.from(document.body.children).forEach(function (el) { if (el !== installScreen) el.style.display = 'none'; });
+      applyMobileSizing();
+    }
+  }
+
+  function setBtn(type) {
+    var btn = document.getElementById('is-btn');
+    if (!btn) return;
+    btn.disabled = false;
+    btn.style.display = 'inline-block';
+    if (type === 'loading') {
+      btn.disabled  = true;
+      btn.innerHTML = '<span class="is-dots"><span></span><span></span><span></span></span>';
+      btn.onclick   = null;
+    } else if (type === 'install') {
+      btn.innerHTML = 'Install';
+      btn.onclick = async function () {
+        if (!deferredPrompt) return;
+        btn.disabled  = true;
+        btn.innerHTML = '<span class="is-dots"><span></span><span></span><span></span></span>';
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') { deferredPrompt = null; }
+        else { btn.disabled = false; btn.innerHTML = 'Install'; }
+      };
+    } else if (type === 'installed') {
+      btn.innerHTML = 'App Installed ✅';
+      btn.disabled  = true;
+      btn.onclick   = null;
+    } else {
+      btn.innerHTML = '🔄&nbsp;&nbsp;Try Again';
+      btn.disabled  = false;
+      btn.onclick   = function () { window.location.reload(); };
+    }
+    requestAnimationFrame(fitToViewport);
+  }
+
+  applyMode();
+  window.matchMedia('(display-mode: standalone)').addEventListener('change', applyMode);
+  window.addEventListener('resize', function () { applyMobileSizing(); });
+
+  const swAlreadyActive = !!(navigator.serviceWorker && navigator.serviceWorker.controller);
+  if (window._deferredPrompt) { deferredPrompt = window._deferredPrompt; window._deferredPrompt = null; }
+  if (swAlreadyActive) {
+    if (deferredPrompt) { setBtn('install'); } else { setBtn('installed'); }
+  } else {
+    const btn = document.getElementById('is-btn');
+    if (btn) { btn.style.display = 'inline-block'; }
+    setBtn('loading');
+    let promptTimer = setTimeout(function () { if (!deferredPrompt) setBtn('refresh'); }, 10000);
+    window.addEventListener('beforeinstallprompt', function (e) {
+      clearTimeout(promptTimer); e.preventDefault(); deferredPrompt = e; setBtn('install');
+    });
+  }
+  window.addEventListener('beforeinstallprompt', function (e) {
+    if (swAlreadyActive) { e.preventDefault(); deferredPrompt = e; setBtn('install'); }
+  });
+  window.addEventListener('appinstalled', function () { deferredPrompt = null; setBtn('installed'); });
+
+})();
+</script>
+
+
+<header>
+  <div class="hicon" id="hicon"></div>
+  <div class="htext">
+    <h1 id="htitle"></h1>
+  </div>
+</header>
+
+<!-- REFRESH CONFIRMATION POPUP -->
+<div class="popup-overlay" id="refreshPopup">
+  <div class="popup-box">
+    <div class="popup-icon">⚠️</div>
+    <div class="popup-title">Are you Sure ?</div>
+    <div class="popup-msg">Abhi ki saari calculation erase ho jayegi.</div>
+    <div class="popup-btns">
+      <button class="popup-cancel" ontouchstart="" onclick="closeRefreshPopup()">Cancel</button>
+      <button class="popup-ok" ontouchstart="" onclick="confirmReset()">Ok</button>
+    </div>
+  </div>
+</div>
+
+<div class="scroll">
+  <div id="view-input">
+    <!-- Service cards yahan JS se generate honge -->
+    <button class="calcbtn" ontouchstart="" onclick="showResult()">Confirm</button>
+  </div>
+  <div id="view-result">
+    <div class="sumcard">
+      <div id="bk"></div>
+      <div class="dvdr"></div>
+      <div class="frow">
+        <span class="flbl">Total</span>
+        <span class="fval" id="fin">₹0</span>
+      </div>
+    </div>
+    <button class="ebtn" ontouchstart="" onclick="goBack()">✏️&nbsp; Edit</button>
+    <button class="rbtn" ontouchstart="" onclick="showRefreshPopup()">🔄&nbsp; New</button>
+  </div>
+</div>
+
+
+<script>
+/* ── CONFIG se setup ── */
+document.title = CONFIG.clientName + " Calculator";
+document.getElementById('hicon').textContent = CONFIG.headerEmoji;
+document.getElementById('htitle').innerHTML  = CONFIG.clientName + ' <br> Calculator';
+
+/* ── Service cards dynamically generate karo ── */
+const Q = {};
+const inputView  = document.getElementById('view-input');
+const confirmBtn = inputView.querySelector('.calcbtn');
+
+var _emojiColors = ['ec','es','ecp','eph'];
+CONFIG.services.forEach(function(s, i) {
+  Q[s.id] = 0;
+  var card = document.createElement('div');
+  card.className = 'scard';
+  card.id = 'c-' + s.id;
+  card.innerHTML =
+    '<div class="stop"><div class="sinfo">' +
+      '<div class="semoji ' + _emojiColors[i % 4] + '">' + s.emoji + '</div>' +
+      '<div>' +
+        '<div class="sname">' + s.name + '</div>' +
+        '<div class="srate">₹' + s.rate + ' per ' + s.unit + '</div>' +
+      '</div>' +
+    '</div></div>' +
+    '<div class="qrow">' +
+      '<button class="qbtn" ontouchstart="ch(event,\'' + s.id + '\',-1);startHold(\'' + s.id + '\',-1)" ontouchend="endHold()" ontouchcancel="endHold()" onclick="return false">−</button>' +
+      '<input class="qinp" type="number" inputmode="numeric" min="0" max="999" id="q-' + s.id + '" value="0" oninput="sq(\'' + s.id + '\',this.value)" onblur="sb(\'' + s.id + '\')" onfocus="sf(\'' + s.id + '\')" disabled>' +
+      '<button class="qbtn" ontouchstart="ch(event,\'' + s.id + '\',1);startHold(\'' + s.id + '\',1)" ontouchend="endHold()" ontouchcancel="endHold()" onclick="return false">+</button>' +
+    '</div>';
+  inputView.insertBefore(card, confirmBtn);
+});
+
+/* ── HOLD-TO-REPEAT ── */
+let _holdTimer = null, _holdInterval = null;
+
+function startHold(id, d) {
+  _holdTimer = setTimeout(function() {
+    _holdInterval = setInterval(function() {
+      Q[id] = Math.min(999, Math.max(0, Q[id] + d));
+      document.getElementById('q-' + id).value = Q[id];
+    }, 80);
+  }, 500);
+}
+function endHold() {
+  clearTimeout(_holdTimer); clearInterval(_holdInterval);
+  _holdTimer = null; _holdInterval = null;
+}
+function ch(e, id, d) {
+  if (e) e.preventDefault();
+  Q[id] = Math.min(999, Math.max(0, Q[id] + d));
+  document.getElementById('q-' + id).value = Q[id];
+}
+function sq(id, v) { Q[id] = Math.max(0, parseInt(v) || 0); }
+function sf(id) { const inp = document.getElementById('q-' + id); if (inp.value === '0') inp.value = ''; }
+function sb(id) { const inp = document.getElementById('q-' + id); if (inp.value === '' || inp.value === null) { inp.value = 0; Q[id] = 0; } }
+
+function showResult() {
+  trackVisitor();
+  let total = 0;
+  const items = [];
+  CONFIG.services.forEach(function(s) {
+    const q = Q[s.id], amt = q * s.rate;
+    total += amt;
+    if (q > 0) items.push({ label: s.name + ' (₹' + s.rate + ' × ' + q + ')', amt: '₹' + amt });
+  });
+  document.getElementById('fin').textContent = '₹' + total;
+  document.getElementById('bk').innerHTML = items.length
+    ? items.map(function(i) { return '<div class="bkrow"><span>' + i.label + '</span><span>' + i.amt + '</span></div>'; }).join('')
+    : '<div class="bkrow"><span style="color:var(--border)">Koi item nahi</span></div>';
+
+  document.getElementById('hicon').textContent = '🎉';
+  document.getElementById('htitle').innerHTML  = 'Thanks for <br> Shopping!';
+  document.getElementById('view-input').style.display  = 'none';
+  document.getElementById('view-result').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+function goBack() {
+  document.getElementById('hicon').textContent = CONFIG.headerEmoji;
+  document.getElementById('htitle').innerHTML  = CONFIG.clientName + ' <br> Calculator';
+  document.getElementById('view-input').style.display  = 'flex';
+  document.getElementById('view-result').style.display = 'none';
+}
+
+function reset() {
+  CONFIG.services.forEach(function(s) { Q[s.id] = 0; document.getElementById('q-' + s.id).value = 0; });
+  document.getElementById('hicon').textContent = CONFIG.headerEmoji;
+  document.getElementById('htitle').innerHTML  = CONFIG.clientName + ' <br> Calculator';
+  document.getElementById('view-input').style.display  = 'flex';
+  document.getElementById('view-result').style.display = 'none';
+}
+
+function showRefreshPopup()  { document.getElementById('refreshPopup').classList.add('show'); }
+function closeRefreshPopup() { document.getElementById('refreshPopup').classList.remove('show'); }
+function confirmReset()      { closeRefreshPopup(); reset(); }
+
+document.getElementById('refreshPopup').addEventListener('click', function(e) { if (e.target === this) closeRefreshPopup(); });
+document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, {passive: false});
+document.addEventListener('gesturestart', e => e.preventDefault());
+let lastTap = 0;
+document.addEventListener('touchend', function(e) {
+  const now = Date.now();
+  if (now - lastTap < 300) e.preventDefault();
+  lastTap = now;
+}, { passive: false });
+</script>
+
+<!-- Free Trial -->
+<script>
+(function() {
+  var EXPIRY_DATE = CONFIG.expiryDate;
+  function checkFreeTier() {
+    var today  = new Date(); today.setHours(0,0,0,0);
+    var expiry = new Date(EXPIRY_DATE); expiry.setHours(0,0,0,0);
+    if (today > expiry) {
+      var expired = document.createElement('div');
+      expired.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;text-align:center;padding:40px;';
+      expired.innerHTML = '<div><h1 style="color:#ff2222;font-size:3rem;margin-bottom:16px;">🚫 Free Trial Ends</h1><p style="color:#ff5555;font-size:1.4rem;">Purchase for Lifetime</p></div>';
+      document.body.appendChild(expired);
+      clearInterval(trialInterval);
+    }
+  }
+  var trialInterval = setInterval(checkFreeTier, 30000);
+  checkFreeTier();
+})();
+</script>
+
+<!-- Tracker -->
+<script>
+function trackVisitor() {
+  var img = new Image();
+  img.src = "https://visitor-tracker.nihalthakral-trader.workers.dev/track?name="
+            + encodeURIComponent(CONFIG.trackerName) + "&t=" + Date.now();
+}
+</script>
+
+</body>
+</html>
