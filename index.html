@@ -81,7 +81,8 @@
 
   /* BUSINESS PLAN SECTION */
   .business {
-    padding: 5rem 7%;
+    /* No horizontal padding — business-area goes full-bleed */
+    padding: 5rem 0;
   }
   .business-title {
     font-family: 'Instrument Serif', serif;
@@ -89,24 +90,28 @@
     font-weight: 400;
     letter-spacing: -0.02em;
     color: #1a1a1a;
+    /* Padding lives here, not on the parent section */
+    padding: 0 7%;
     margin-bottom: 2.5rem;
   }
   .business-area {
     background: #efefef;
-    border-radius: 16px;
-    padding: 3rem;
+    /* No border-radius — full-bleed edge-to-edge for max impact */
+    padding: 3.5rem 4%;
+    /* JS scales the pre to fit; horizontal scroll is a last-resort fallback */
     overflow-x: auto;
   }
 
-  /* TEXT ART — fully responsive font size */
+  /* TEXT ART — font-size is set entirely by JS; do NOT put clamp() here */
   .plan-pre {
     font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(8px, 1.85vw, 13px);
     font-weight: 400;
     line-height: 1.85;
-    white-space: pre;
+    white-space: pre;          /* keep ASCII art lines intact */
     color: #555;
     margin: 0;
+    display: block;
+    /* No font-size declaration — fitPre() owns it */
   }
   .plan-pre .bold   { color: #1a1a1a; font-weight: 700; }
   .plan-pre .green  { color: #1D9E75; font-weight: 700; }
@@ -132,9 +137,11 @@
   @media (max-width: 600px) {
     nav { padding: 1.2rem 5%; }
     .hero { padding: 3rem 5%; }
-    .business { padding: 3.5rem 5%; }
+    /* Section stays 0 side padding; title keeps its own */
+    .business { padding: 3.5rem 0; }
+    .business-title { padding: 0 5%; }
     footer { padding: 1.5rem 5%; }
-    .business-area { padding: 1.5rem 1rem; }
+    .business-area { padding: 2rem 3%; }
   }
 </style>
 </head>
@@ -240,6 +247,70 @@
   <span class="footer-name">nihalthakral.github@gmail.com</span>
   <span class="footer-copy">© 2026</span>
 </footer>
+
+<script>
+/* ─── Auto-scale: fit the pre to the container width ────────────────────────
+   Strategy:
+   1. Reset font-size to a known baseline (16px).
+   2. Force synchronous reflow so the browser re-measures the element.
+   3. Read the pre's natural scroll-width (widest line) vs available container
+      width (container minus its own padding).
+   4. Scale = available / natural → new font-size = 16px × scale.
+   5. Floor at 7px so it never becomes invisible on tiny screens.
+   6. Re-run after fonts are loaded (Google Fonts arrive async → first measure
+      uses fallback metrics → result slightly off → fonts.ready corrects it).
+   7. Debounced resize listener keeps it live on window resize / orientation
+      change.
+─────────────────────────────────────────────────────────────────────────── */
+(function () {
+  function fitPre() {
+    var pre  = document.querySelector('.plan-pre');
+    var area = document.querySelector('.business-area');
+    if (!pre || !area) return;
+
+    // Reset to baseline so scrollWidth reflects 16px character widths
+    pre.style.fontSize = '16px';
+
+    // Force the browser to flush and recalculate layout synchronously
+    void pre.offsetWidth;
+
+    var cs     = window.getComputedStyle(area);
+    var avail  = area.clientWidth
+                 - parseFloat(cs.paddingLeft  || '0')
+                 - parseFloat(cs.paddingRight || '0');
+    var natW   = pre.scrollWidth;
+
+    if (natW > 0 && avail > 0) {
+      var newSize = 16 * (avail / natW);
+      pre.style.fontSize = Math.max(7, newSize) + 'px';
+    }
+  }
+
+  // Run once DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fitPre);
+  } else {
+    fitPre();
+  }
+
+  // Re-run after Google Fonts finish loading (async) for accurate metrics
+  var fontsReady = (document.fonts && document.fonts.ready)
+    ? document.fonts.ready
+    : Promise.resolve();
+  fontsReady.then(fitPre);
+
+  // Debounced resize / orientation handler
+  var _resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(fitPre, 60);
+  });
+  window.addEventListener('orientationchange', function () {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(fitPre, 120);
+  });
+})();
+</script>
 
 <script>
 (function() {
