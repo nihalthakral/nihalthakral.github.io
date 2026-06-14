@@ -8,643 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Instrument Sans', sans-serif;
-    background: #faf9f7;
-    color: #1a1a1a;
-    min-height: 100vh;
-    /* Prevent horizontal scroll at page level */
-    overflow-x: hidden;
-  }
-
-  /* NAV */
-  nav {
-    padding: 1.6rem 7%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    border-bottom: 1px solid #ebebeb;
-  }
-  .nav-name {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-  }
-  .nav-download {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    /* FIX: min-height 44px for touch targets */
-    min-height: 44px;
-    padding: 0.55rem 1.2rem;
-    background: #e8520a;
-    color: #fff;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.2s;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .nav-download:hover { background: #d04708; }
-  /* FIX: keyboard focus visible */
-  .nav-download:focus-visible {
-    outline: 3px solid #e8520a;
-    outline-offset: 3px;
-  }
-  .nav-download svg { width: 14px; height: 14px; flex-shrink: 0; }
-
-  /* HERO */
-  .hero {
-    /* FIX: use dvh (dynamic viewport height) for mobile browsers with toolbars */
-    min-height: calc(100vh - 65px);
-    min-height: calc(100dvh - 65px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 4rem 5%;
-    text-align: center;
-  }
-  .hero-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(4.5rem, 18vw, 18rem);
-    font-weight: 400;
-    line-height: 0.95;
-    letter-spacing: -0.03em;
-    color: #1a1a1a;
-  }
-  .hero-title em {
-    font-style: normal;
-    color: #e8520a;
-  }
-
-  /* DIVIDER */
-  .divider {
-    border: none;
-    border-top: 1px solid #ebebeb;
-    margin: 0;
-  }
-
-  /* FOOTER */
-  footer {
-    padding: 1.8rem 7%;
-    border-top: 1px solid #ebebeb;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .footer-name {
-    font-size: 0.85rem;
-    color: #aaa;
-    font-weight: 400;
-    /* FIX: prevent email overflow on small screens */
-    word-break: break-all;
-  }
-  .footer-copy { font-size: 0.82rem; color: #bbb; }
-
-  /* ══════════════════════════════════════════════════════════
-     ▼  REDESIGNED — "Konsi Problem ?" included + neeche sab
-  ══════════════════════════════════════════════════════════ */
-
-  .business {
-    padding: 5rem 0 6rem;
-  }
-
-  /* White card for each section */
-  .section-block {
-    background: #ffffff;
-    border-radius: 20px;
-    margin: 0 5% 2.5rem;
-    box-shadow:
-      0 1px 4px rgba(26, 18, 8, 0.05),
-      0 8px 32px rgba(26, 18, 8, 0.09);
-    /* FIX: use clip instead of hidden so child scroll containers still work */
-    overflow: clip;
-  }
-
-  /* Section heading — orange left bar as accent */
-  .business-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(1.55rem, 3.5vw, 2.4rem);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    color: #1a1a1a;
-    padding: 2rem 2.8rem 1.6rem;
-    border-bottom: 1px solid #f0ece5;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-  .business-title::before {
-    content: '';
-    display: inline-block;
-    width: 4px;
-    height: 1.25em;
-    background: #e8520a;
-    border-radius: 2px;
-    flex-shrink: 0;
-    align-self: center;
-  }
-
-  /* Dark warm terminal area */
-  .business-area {
-    background: #1c1812;
-    padding: 2.8rem 3.2rem;
-    overflow-x: hidden;        /* clip instead of scroll — text wraps via pre-wrap */
-  }
-
-  /* Pre text */
-  .plan-pre {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 400;
-    line-height: 1.95;
-    white-space: pre-wrap;       /* wrap long lines instead of extending width */
-    overflow-wrap: break-word;   /* break any unbreakable sequence at container edge */
-    word-break: break-word;      /* safari fallback */
-    color: #c2b29a;
-    margin: 0;
-    display: block;
-    font-size: clamp(0.78rem, 1.8vw, 0.94rem);
-  }
-  .plan-pre .bold   { color: #eddcc6; font-weight: 700; }
-  .plan-pre .green  { color: #5ed4a0; font-weight: 700; }
-  .plan-pre .blue   { color: #78b8f8; font-weight: 700; }
-  .plan-pre .purple { color: #b4a8f8; font-weight: 700; }
-  .plan-pre .amber  { color: #f0b040; font-weight: 700; }
-  .plan-pre .teal   { color: #3dd4b0; font-weight: 700; }
-  .plan-pre .red    { color: #ff8080; font-weight: 700; }
-
-  /* CTA section */
-  .cta-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.85rem;
-    padding: 2.4rem 2.8rem;
-    border-top: 1px solid #f0ece5;
-    background: #ffffff;
-  }
-  .cta-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.55rem;
-    /* FIX: min-height 44px for touch target */
-    min-height: 44px;
-    padding: 0.85rem 2.2rem;
-    background: #e8520a;
-    color: #ffffff;
-    border-radius: 12px;
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    text-decoration: none;
-    letter-spacing: -0.01em;
-    box-shadow: 0 4px 18px rgba(232, 82, 10, 0.28);
-    transition: background 0.2s, transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s;
-  }
-  .cta-primary:hover {
-    background: #d04708;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(232, 82, 10, 0.42);
-  }
-  .cta-primary:focus-visible {
-    outline: 3px solid #e8520a;
-    outline-offset: 3px;
-  }
-  .cta-hint {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.82rem;
-    color: #8a8078;
-    text-align: center;
-  }
-  .cta-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.55rem;
-    /* FIX: min-height 44px for touch target */
-    min-height: 44px;
-    padding: 0.65rem 1.8rem;
-    background: transparent;
-    color: #6a6058;
-    border: 1.5px solid #d8d0c5;
-    border-radius: 10px;
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 500;
-    text-decoration: none;
-    letter-spacing: -0.01em;
-    transition: border-color 0.2s, color 0.2s, transform 0.2s;
-  }
-  .cta-secondary:hover {
-    border-color: #a09080;
-    color: #1a1a1a;
-    transform: translateY(-1px);
-  }
-  .cta-secondary:focus-visible {
-    outline: 3px solid #e8520a;
-    outline-offset: 3px;
-  }
-
-  /* Scroll-reveal animation */
-  .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition:
-      opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .reveal.in-view {
-    opacity: 1;
-    transform: none;
-  }
-  .reveal-d1 { transition-delay: 0.1s; }
-
-  /* ── Responsive — Tablet ── */
-  @media (max-width: 768px) {
-    nav { padding: 1.2rem 5%; }
-    .hero { padding: 3rem 5%; }
-    footer { padding: 1.5rem 5%; }
-    .business { padding: 3.5rem 0 5rem; }
-    .section-block { margin: 0 4% 2rem; border-radius: 16px; }
-    .business-title { padding: 1.6rem 1.8rem 1.2rem; }
-    .business-area { padding: 2rem 1.8rem; }
-    .cta-section { padding: 1.8rem; }
-  }
-
-  /* ── Responsive — Mobile ── */
-  @media (max-width: 480px) {
-    .business { padding: 2.5rem 0 4rem; }
-    .section-block { margin: 0 3.5% 1.6rem; border-radius: 14px; }
-    .business-title { padding: 1.3rem 1.4rem 1rem; font-size: clamp(1.3rem, 5.5vw, 1.7rem); }
-    .business-area { padding: 1.6rem 1.4rem; }
-    .cta-section { padding: 1.4rem 1.4rem 1.6rem; gap: 0.75rem; }
-    .cta-primary { padding: 0.8rem 1.6rem; font-size: 0.9rem; width: 100%; }
-    .cta-secondary { width: 100%; }
-  }
-
-  /* ── Responsive — Very small screens (320–360px) ── */
-  @media (max-width: 380px) {
-    nav { padding: 1rem 4%; }
-    .nav-name { font-size: 0.9rem; }
-    .nav-download { font-size: 0.78rem; padding: 0.55rem 0.85rem; gap: 0.35rem; }
-    .nav-download svg { width: 12px; height: 12px; }
-    .section-block { margin: 0 3% 1.4rem; }
-    footer { padding: 1.2rem 4%; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; transform: none; transition: none; }
-    .cta-primary, .cta-secondary { transition: background 0.2s, border-color 0.2s, color 0.2s; }
-    .cta-primary:hover, .cta-secondary:hover { transform: none; }
-  }
-
-  /* ════════════════════════════════════════════════════
-     NEW SECTIONS — Konsi Problem / Comparison / Kaam / Price
-  ════════════════════════════════════════════════════ */
-
-  /* ── Scroll prompt chip ── */
-  .scroll-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    margin-top: 1.4rem;
-    background: rgba(120, 184, 248, 0.12);
-    border: 1px solid rgba(120, 184, 248, 0.25);
-    border-radius: 99px;
-    padding: 0.4rem 1.1rem 0.4rem 0.8rem;
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #78b8f8;
-    letter-spacing: 0.01em;
-    animation: bob 2.2s ease-in-out infinite;
-  }
-  .scroll-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
-  @keyframes bob {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(4px); }
-  }
-
-  /* ── Compare Shell ── */
-  .compare-shell {
-    background: #1c1812;
-    padding: 2.2rem 2.2rem 2.6rem;
-  }
-  .compare-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    align-items: stretch;
-  }
-
-  /* Cards */
-  .cmp-card {
-    border-radius: 14px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
-  }
-  .cmp-loser {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.07);
-  }
-  .cmp-winner {
-    background: #fff8f3;
-    border: 2.5px solid #e8520a;
-    box-shadow:
-      0 0 0 3px rgba(232,82,10,0.13),
-      0 14px 44px rgba(232,82,10,0.22);
-    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1);
-  }
-  .cmp-winner:hover { transform: scale(1.025); }
-
-  .cmp-winner-badge {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #e8520a;
-    color: #fff;
-    font-size: 0.62rem;
-    font-weight: 700;
-    padding: 0.26rem 1rem;
-    border-radius: 0 0 10px 10px;
-    white-space: nowrap;
-    letter-spacing: 0.05em;
-    font-family: 'Instrument Sans', sans-serif;
-    text-transform: uppercase;
-    z-index: 1;
-  }
-
-  .cmp-head {
-    padding: 2.2rem 0.85rem 0.9rem;
-    text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .cmp-winner .cmp-head { border-bottom-color: #f0d4be; }
-
-  .cmp-ico { font-size: 1.85rem; display: block; margin-bottom: 0.5rem; }
-  .cmp-name {
-    font-family: 'Instrument Serif', serif;
-    font-size: 0.95rem;
-    letter-spacing: -0.01em;
-  }
-  .cmp-loser .cmp-name { color: #7a6a5a; }
-  .cmp-winner .cmp-name { color: #c84000; font-size: 1.05rem; }
-
-  /* Score dots */
-  .cmp-dots {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 0.6rem;
-  }
-  .cmp-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    flex-shrink: 0;
-  }
-  .cmp-dot.on { background: #e8520a; opacity: 0.5; }
-  .cmp-dot.win { background: #e8520a; }
-  .cmp-winner .cmp-dot { background: #f5d0b0; }
-  .cmp-winner .cmp-dot.win { background: #e8520a; }
-
-  /* Attribute list */
-  .cmp-list {
-    list-style: none;
-    padding: 0.9rem 0.85rem 0.4rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.48rem;
-    flex: 1;
-  }
-  .cmp-list li {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.75rem;
-    line-height: 1.35;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.38rem;
-  }
-  .cmp-loser .cmp-list li { color: #7a6a5a; }
-  .cmp-winner .cmp-list li { color: #3a200e; font-size: 0.8rem; font-weight: 500; }
-  .cmp-li-icon { flex-shrink: 0; font-size: 0.78rem; }
-
-  /* Verdict chip */
-  .cmp-verdict {
-    margin: 0.55rem 0.7rem 0.9rem;
-    text-align: center;
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 0.38rem 0.5rem;
-    border-radius: 8px;
-    font-family: 'Instrument Sans', sans-serif;
-    letter-spacing: 0.01em;
-  }
-  .cmp-no  { background: rgba(200,80,80,0.15); color: #c07070; }
-  .cmp-win {
-    background: #e8520a;
-    color: #fff;
-    font-size: 0.82rem;
-    padding: 0.6rem 0.5rem;
-    border-radius: 10px;
-    margin: 0.5rem 0.65rem 1rem;
-    box-shadow: 0 4px 16px rgba(232,82,10,0.38);
-  }
-
-  /* ── Note Boxes (inside business-area, for Konsa Kaam) ── */
-  .note-boxes {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.85rem;
-    margin: 1.4rem 0;
-  }
-  .note-box {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-left: 3px solid #e8520a;
-    border-radius: 0 12px 12px 0;
-    padding: 1rem 1.1rem;
-  }
-  .note-box-label {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.58rem;
-    font-weight: 700;
-    color: #e8520a;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.4rem;
-  }
-  .note-box-body {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(0.7rem, 1.55vw, 0.8rem);
-    line-height: 1.65;
-    color: #c2b29a;
-  }
-  .note-box-body strong { color: #f0b040; font-weight: 700; }
-  .note-box-body em { font-style: normal; color: #5ed4a0; }
-
-  /* ── Pricing Section Body ── */
-  .price-body {
-    background: #1c1812;
-    padding: 2.2rem 2.8rem;
-  }
-  .price-intro {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(0.78rem, 1.8vw, 0.9rem);
-    color: #c2b29a;
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-  }
-  .price-tiles {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1.4rem;
-  }
-  .price-tile {
-    background: rgba(94,212,160,0.07);
-    border: 1.5px solid rgba(94,212,160,0.22);
-    border-radius: 14px;
-    padding: 1.4rem 1rem 1.2rem;
-    text-align: center;
-  }
-  .price-tile-label {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: #8a9a8a;
-    letter-spacing: 0.02em;
-    margin-bottom: 0.6rem;
-  }
-  .price-tile-amount {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(2.2rem, 6vw, 3.2rem);
-    color: #5ed4a0;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    margin-bottom: 0.5rem;
-  }
-  .price-tile-tag {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.73rem;
-    font-weight: 700;
-    color: #5ed4a0;
-  }
-
-  .price-advantage {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-left: 3px solid #f0b040;
-    border-radius: 0 12px 12px 0;
-    padding: 1rem 1.2rem;
-    margin-bottom: 1.4rem;
-  }
-  .price-adv-title {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #f0b040;
-    margin-bottom: 0.45rem;
-    letter-spacing: -0.01em;
-  }
-  .price-adv-body {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(0.72rem, 1.6vw, 0.82rem);
-    color: #c2b29a;
-    line-height: 1.55;
-  }
-  .price-adv-body .red { color: #ff8080; font-weight: 700; }
-
-  .price-rule {
-    border: none;
-    border-top: 1px solid rgba(255,255,255,0.07);
-    margin: 0 0 1.4rem;
-  }
-
-  .price-perks {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    margin-top: 0.8rem;
-  }
-  .price-perk {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(0.74rem, 1.65vw, 0.86rem);
-    color: #3dd4b0;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .price-perk::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: #3dd4b0;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  /* ── Responsive: Tablet ── */
-  @media (max-width: 768px) {
-    .compare-shell { padding: 1.5rem 1.1rem 2rem; }
-    .compare-grid  { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-
-    /* Winner spans full width on tablet */
-    .cmp-winner {
-      grid-column: 1 / -1;
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
-    .cmp-winner .cmp-head {
-      flex: 0 0 auto;
-      width: 130px;
-      border-bottom: none;
-      border-right: 1px solid #f0d4be;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-top: 2rem;
-    }
-    .cmp-winner .cmp-list { flex: 1; min-width: 0; }
-    .cmp-win { flex: 0 0 100%; }
-
-    .note-boxes { grid-template-columns: 1fr; }
-    .price-body  { padding: 1.6rem 1.3rem; }
-    .price-tiles { gap: 0.75rem; }
-  }
-
-  /* ── Responsive: Mobile ── */
-  @media (max-width: 480px) {
-    .compare-grid  { grid-template-columns: 1fr; }
-    .cmp-winner    { flex-direction: column; }
-    .cmp-winner .cmp-head {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid #f0d4be;
-    }
-    .price-tiles { grid-template-columns: 1fr; }
-    .price-body  { padding: 1.4rem 1rem; }
-  }
-</style>
+<link rel="stylesheet" href="design_and_backend/styles.css">
 </head>
 <body>
 
@@ -744,7 +108,7 @@ Toh maine socha — kya yeh possible hai?
         <div class="cmp-card cmp-winner">
           <div class="cmp-winner-badge">⭐ Recommended</div>
           <div class="cmp-head">
-            <span class="cmp-ico"><img src="image.png" style="width: 150px; height: 80px"></span>
+            <span class="cmp-ico"><img src="design_and_backend/image.png" style="width: 150px; height: 80px"></span>
             <div class="cmp-name">Application - Software</div>
             <div class="cmp-dots">
               <span class="cmp-dot win"></span>
@@ -859,6 +223,203 @@ Aapko bhi bta dunga wahi par → <span class="amber">"Konsa Kaam ?"</span>
     </div>
   </div>
 
+  <!-- ══ SECTION 5 — Case Study ══ -->
+  <div class="section-block reveal">
+    <h2 class="business-title">Case Study — kya kisi ki problem solve kiya mene ?</h2>
+    <div class="cs-body">
+
+      <!-- Person Details -->
+      <div class="cs-person-card">
+        <div class="cs-person-icon">👤</div>
+        <div class="cs-person-info">
+          <div class="cs-person-label">Person Details</div>
+          <div class="cs-person-row">
+            <span class="cs-pk">Name</span>
+            <span class="cs-eq">=</span>
+            <span class="cs-pv-hidden">Hidden <span class="cs-privacy-tag">Privacy</span></span>
+          </div>
+          <div class="cs-person-row">
+            <span class="cs-pk">Work</span>
+            <span class="cs-eq">=</span>
+            <span>Shopkeeper of Printout Shop</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Problem 1 ── -->
+      <div class="cs-problem-tag">⚠ Problem #1</div>
+
+      <div class="cs-problem-intro">Unki shop par alag-alag printouts ke prices hain —</div>
+
+      <div class="cs-price-box">
+        <div class="cs-price-row">
+          <span class="cs-price-row-label">Photo Copy</span>
+          <span class="cs-price-amt">₹3 / page</span>
+        </div>
+        <div class="cs-price-row">
+          <span class="cs-price-row-label">Saada Printout</span>
+          <span class="cs-price-amt">₹5 / page</span>
+        </div>
+        <div class="cs-price-row">
+          <span class="cs-price-row-label">Colored Printout</span>
+          <span class="cs-price-amt">₹10 / page</span>
+        </div>
+        <div class="cs-price-row">
+          <span class="cs-price-row-label">Colored Photo Copy</span>
+          <span class="cs-price-amt">₹10 / page</span>
+        </div>
+      </div>
+
+      <div class="cs-issues">
+        <div class="cs-issue">
+          <span class="cs-issue-n">(1)</span>
+          <span>Normal calculator se calculate karne mein bahut <span style="color:#ff8080;font-weight:700">time lagta tha</span> — jab pages zyada ho jaate toh bilkul slow ho jaata tha kaam.</span>
+        </div>
+        <div class="cs-issue">
+          <span class="cs-issue-n">(2)</span>
+          <span>Kabhi kabhi <span style="color:#ff8080;font-weight:700">calculation mein galti</span> bhi ho jaati thi — Natural hai, koi baat nahi, but phir bhi problem toh thi.</span>
+        </div>
+        <div class="cs-issue">
+          <span class="cs-issue-n">(3)</span>
+          <span>Koi customer aata, prints nikalwata, toh unhe dikhate kaise total kiya — lekin <span style="color:#ff8080;font-weight:700">bahut logo ko samajh nahi aata tha</span>. mushkil hota thaa samajhna like = 5 x 3 + 10 x 6 + 10 x 9 = ₹165</span>
+        </div>
+      </div>
+
+      <!-- Solution 1 -->
+      <div class="cs-solution">
+        <div class="cs-solution-tag">✅ Solution — Android Application</div>
+        <div class="cs-solution-body">
+          Unke liye ek <span class="or">Android Phone Application</span> banaya —<br>
+          ab woh sirf pages enter karte hain, aur baki sab <span class="hi">application khud karta hai.</span><br><br>
+          <span class="hi">Fast calculate</span> — zyada pages ho ya kam, ek second nahi lagta.<br>
+          <span class="hi">Galti nahi ho sakti</span> — machine hai, insaan nahi.<br>
+          <span class="hi">Customer bhi asaani se samajh leta hai</span> — clearly dikhta hai kya kya liya aur total kitna hua.
+        </div>
+      </div>
+
+      <!-- App Screenshots -->
+      <div class="cs-images cs-images-2">
+        <div class="cs-img-wrap">
+          <img src="design_and_backend/1.png" alt="Android Application Screenshot 1">
+          <div class="cs-img-label">App — Screenshot 1</div>
+        </div>
+        <div class="cs-img-wrap">
+          <img src="design_and_backend/2.png" alt="Android Application Screenshot 2">
+          <div class="cs-img-label">App — Screenshot 2</div>
+        </div>
+      </div>
+
+      <hr class="cs-separator">
+
+      <!-- ── Problem 2 ── -->
+      <div class="cs-problem-tag">⚠ Problem #2</div>
+
+      <div class="cs-issues">
+        <div class="cs-issue">
+          <span class="cs-issue-n">→</span>
+          <span>Unhone apni shop par apna <span style="color:#78b8f8;font-weight:700">Gmail ID</span> likha hua hai toh customers kabhi kabhi mail karte hain. Ab problem yeh thi ki woh <span style="color:#ff8080;font-weight:700">baar baar Gmail check karte rehte the</span> — har thodi der mein baar-baar</span>
+        </div>
+        <div class="cs-issue">
+          <span class="cs-issue-n">→</span>
+          <span>Isse unhe <span style="color:#ff8080;font-weight:700">kafi stress hota tha</span> — baar baar check karna, thak jaana, aur koi mail aaya nahi toh mehnat bhi gayi bekaar.</span>
+        </div>
+      </div>
+
+      <!-- Solution 2 -->
+      <div class="cs-solution">
+        <div class="cs-solution-tag">✅ Solution — Computer Software</div>
+        <div class="cs-solution-body">
+          Unke liye ek <span class="or">Computer Software</span> banaya — install hua unke computer mein, <span class="hi">5 minute mein.</span><br><br>
+          Yeh software <span class="bl">khud setup</span> ho jaata hai — koi alag login karne ki zarurat hi nahi.<br><br>
+          Jaise hi koi <span class="hi">new Mail aaya</span> — turant software ko pata chalta hai, ek <span class="am">pyaara sa sound bajta hai</span>, aur notification bhi aa jaata hai.<br><br>
+          Aur ek <span class="pu">extra feature</span> bhi hai — jab bhi koi unread mail pada ho aur shopkeeper ne dekha na ho, Chrome mein <span class="pu">👀 emoji</span> dikhne lagta hai. Matlab — yaad dilata hai ki bhai dekho, kuch aaya hai.<br><br>
+          Kamaal ki baat ? <span class="hi">Yeh sab original Gmail mein bilkul nahi hota.</span><br>Yeh sirf aur sirf is software ki wajah se possible hua.
+        <br>    <span class="hi">aur yeh problems unn shopkeeper ko pata bhi nahi thii, lekin woh uss problem ko face kar rahe thee jisko mene solve kar diya hai.</span>
+        </div>
+      </div>
+
+      <!-- Software Screenshot -->
+      <div class="cs-images cs-images-1">
+        <div class="cs-img-wrap">
+          <img src="design_and_backend/3.png" alt="Gmail Notification Software Screenshot">
+          <div class="cs-img-label">Software — Screenshot</div>
+        </div>
+      </div>
+
+      <!-- Outcome -->
+      <div class="cs-outcome">
+        <div class="cs-outcome-title">Result — Kya hua end mein ?</div>
+        Us shopkeeper uncle ka <span class="hi">kaafi time aur mehnat bach gayi.</span><br>
+        Ab <span class="or">baar baar Gmail check nahi</span> karna padta — software bata deta hai.<br>
+        Stress level <span class="hi">kam ho gaya hai</span>, ab woh zyada relaxed rehte hain.<br>
+        Aur woh <span class="or">bahut khush hain</span> — yeh sun ke mujhe bhi accha lagta hai. 😊
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECTION — Mein Kon Hoon ? ══ -->
+  <div class="section-block reveal">
+    <h2 class="business-title">Mein Kon Hoon ?</h2>
+    <div class="profile-body">
+
+      <!-- Left: Photo — fills perfectly -->
+      <div class="profile-photo-col">
+        <img src="design_and_backend/me.png" alt="Nihal Thakral">
+      </div>
+
+      <!-- Right: Info panel -->
+      <div class="profile-info-col">
+        <div class="profile-name-big">Nihal Thakral</div>
+        <div class="profile-role-tag">Developer &middot; Problem Solver</div>
+        <div class="profile-avail">
+          <span class="profile-avail-dot"></span>
+          Available
+        </div>
+
+        <!-- Info Table -->
+        <div class="profile-table">
+          <div class="profile-row">
+            <span class="profile-pk">Name</span>
+            <span class="profile-pv">Nihal Thakral</span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-pk">Age</span>
+            <span class="profile-pv"><span class="gr" id="prof-age">—</span></span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-pk">Computer Learning</span>
+            <span class="profile-pv"><span class="am" id="prof-comp">—</span> ka experience</span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-pk">App / Software Development</span>
+            <span class="profile-pv"><span class="am" id="prof-app">—</span> ka experience</span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-pk">My Teacher</span>
+            <span class="profile-pv"><span class="pu">YouTube</span> &mdash; <span class="or">@ApnaCollegeOfficial</span></span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-pk">My Fav. AI</span>
+            <span class="profile-pv"><span class="or">Claude AI</span> &amp; <span class="gr">Google Gemini</span></span>
+          </div>
+        </div>
+
+        <!-- Coding Languages -->
+        <div class="profile-langs-label">Coding &mdash; Languages &amp; Skills</div>
+        <div class="profile-langs">
+          <span class="profile-lang pl-js">HTML</span>
+          <span class="profile-lang pl-js">CSS</span>
+          <span class="profile-lang pl-js">JavaScript</span>
+          <span class="profile-lang pl-js">PHP</span>
+          <span class="profile-lang pl-js">Python</span>
+          <span class="profile-lang pl-js">Chrome Extension</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
     <div class="cta-section">
       <a href="mailto:nihalthakral.github@gmail.com?subject=Interested%20%26%20Want%20to%20Communicate.&body=Hello%20Developer%2C%20%F0%9F%91%8B%0A%0AMujhe%20aapki%20service%20mein%20interest%20hai.%20%F0%9F%8C%9F%20Main%20chahta%2Fchahti%20hoon%20ki%20aap%20mere%20kaam%20ko%20samjhein%20aur%20ek%20solution%20banayein%20jo%20mere%20liye%20perfect%20ho.%0A%0ATum%20mujhe%20reply%20karo%20taaki%20hum%20aage%20baat%20kar%20sakein.%20%F0%9F%A4%9D%0A%0AThank%20you%2C%0AI%20am%20waiting%20for%20your%20Response."
         class="cta-primary" target="_blank">
@@ -876,107 +437,13 @@ Aapko bhi bta dunga wahi par → <span class="amber">"Konsa Kaam ?"</span>
   <span class="footer-copy">© 2026</span>
 </footer>
 
-<script>
-/* ─── Auto-scale: fit plan-pre text to container width ──────────────────────
-   FIX: fitPre now iterates ALL .plan-pre / .business-area pairs (not just first)
-   FIX: floor raised from 7px to 11px — text stays readable, area stays scrollable
-─────────────────────────────────────────────────────────────────────────── */
-(function () {
-  /* ── fitPre — FIX: handle every section, not just the first ── */
-  function fitPre() {
-    var pres  = document.querySelectorAll('.plan-pre');
-    var areas = document.querySelectorAll('.business-area');
+<!-- Image Zoom Lightbox Overlay -->
+<div id="img-zoom-overlay" role="dialog" aria-modal="true" aria-label="Image zoom">
+  <span id="img-zoom-close" aria-label="Close">&#x2715;</span>
+  <img id="img-zoom-big" src="" alt="">
+</div>
 
-    pres.forEach(function (pre, i) {
-      var area = areas[i];
-      if (!pre || !area) return;
-
-      pre.style.fontSize = '16px';
-      void pre.offsetWidth; /* force reflow */
-
-      var cs    = window.getComputedStyle(area);
-      var avail = area.clientWidth
-                  - parseFloat(cs.paddingLeft  || '0')
-                  - parseFloat(cs.paddingRight || '0');
-      var natW  = pre.scrollWidth;
-
-      if (natW > 0 && avail > 0) {
-        /* FIX: floor raised to 11px — unreadable text is worse than scrolling */
-        var scaled = 16 * (avail / natW);
-        pre.style.fontSize = (scaled >= 11 ? scaled : 11) + 'px';
-        /* If even 11px is too wide, business-area's overflow-x:auto takes over */
-      }
-    });
-  }
-
-  function fitAll() { fitPre(); }
-
-  /* Run once DOM is ready */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fitAll);
-  } else {
-    fitAll();
-  }
-
-  /* Re-run after Google Fonts load */
-  var fontsReady = (document.fonts && document.fonts.ready)
-    ? document.fonts.ready
-    : Promise.resolve();
-  fontsReady.then(fitAll);
-
-  /* Debounced resize / orientation handler */
-  var _resizeTimer;
-  window.addEventListener('resize', function () {
-    clearTimeout(_resizeTimer);
-    _resizeTimer = setTimeout(fitAll, 60);
-  });
-  window.addEventListener('orientationchange', function () {
-    clearTimeout(_resizeTimer);
-    _resizeTimer = setTimeout(fitAll, 120);
-  });
-})();
-</script>
-
-<script>
-/* ─── Scroll-reveal ── */
-(function () {
-  var els = document.querySelectorAll('.reveal');
-  if (!els.length) return;
-
-  if (!('IntersectionObserver' in window)) {
-    els.forEach(function (el) { el.classList.add('in-view'); });
-    return;
-  }
-
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-
-  els.forEach(function (el) { observer.observe(el); });
-})();
-</script>
-
-<script>
-(function() {
-  var name = "Home_Page"; // Is page ka naam
-  var storageKey = "visited_" + name;
-
-  // Check karo ki user ne pehle kabhi page visit kiya hai ya nahi
-  if (!localStorage.getItem(storageKey)) {
-    var img  = new Image();
-    img.src  = "https://visitor-tracker.nihalthakral-trader.workers.dev/track?name="
-             + encodeURIComponent(name) + "&t=" + Date.now();
-             
-    // LocalStorage mein save kar do taaki lifetime mein sirf ek baar chale
-    localStorage.setItem(storageKey, "true");
-  }
-})();
-</script>
+ <script src="design_and_backend/script.js">></script>
  
 </body>
 </html>
