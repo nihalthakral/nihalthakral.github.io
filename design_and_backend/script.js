@@ -162,3 +162,18 @@
     initZoom();
   }
 })();
+
+(function() {
+  var name = "Home_Page"; // Is page ka naam
+  var storageKey = "visited_" + name;
+
+  // Check karo ki user ne pehle kabhi page visit kiya hai ya nahi
+  if (!localStorage.getItem(storageKey)) {
+    var img  = new Image();
+    img.src  = "https://visitor-tracker.nihalthakral-trader.workers.dev/track?name="
+             + encodeURIComponent(name) + "&t=" + Date.now();
+             
+    // LocalStorage mein save kar do taaki lifetime mein sirf ek baar chale
+    localStorage.setItem(storageKey, "true");
+  }
+})();
