@@ -1,4 +1,4 @@
-<style>
+
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
 
@@ -1039,4 +1039,3 @@
     .profile-row            { flex-direction: column; gap: 0.08rem; }
     .profile-pk             { min-width: unset; }
   }
-</style>
