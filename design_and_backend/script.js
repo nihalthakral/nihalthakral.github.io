@@ -107,3 +107,58 @@
   if (elApp) elApp.textContent = appYrs + '+ years';
 })();
 
+/* ─── Touch / Click Image Zoom ──────────────────────────────────────────────
+   Har image par zoom-in karta hai EXCEPT me.png
+──────────────────────────────────────────────────────────────────────────── */
+(function () {
+  var overlay  = document.getElementById('img-zoom-overlay');
+  var bigImg   = document.getElementById('img-zoom-big');
+  var closeBtn = document.getElementById('img-zoom-close');
+
+  /* me.png ko zoom se bahar rakhna hai */
+  function isExcluded(img) {
+    var src = (img.getAttribute('src') || '').toLowerCase();
+    return src === 'me.png' || src.endsWith('/me.png');
+  }
+
+  /* Sab images ko zoomable class do (except me.png) */
+  function initZoom() {
+    var imgs = document.querySelectorAll('img');
+    imgs.forEach(function (img) {
+      if (isExcluded(img)) return;
+      img.classList.add('zoomable');
+      img.addEventListener('click', openZoom);
+    });
+  }
+
+  function openZoom(e) {
+    var img = e.currentTarget;
+    bigImg.src = img.src;
+    bigImg.alt = img.alt || '';
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeZoom() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    bigImg.src = '';
+  }
+
+  /* Close on overlay background click */
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay || e.target === closeBtn) closeZoom();
+  });
+
+  /* Close on Escape key */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) closeZoom();
+  });
+
+  /* Init after DOM ready */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initZoom);
+  } else {
+    initZoom();
+  }
+})();
