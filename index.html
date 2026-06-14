@@ -17,6 +17,8 @@
     background: #faf9f7;
     color: #1a1a1a;
     min-height: 100vh;
+    /* Prevent horizontal scroll at page level */
+    overflow-x: hidden;
   }
 
   /* NAV */
@@ -25,6 +27,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 0.75rem;
     border-bottom: 1px solid #ebebeb;
   }
   .nav-name {
@@ -32,11 +35,14 @@
     font-weight: 600;
     color: #1a1a1a;
     letter-spacing: -0.01em;
+    white-space: nowrap;
   }
   .nav-download {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    /* FIX: min-height 44px for touch targets */
+    min-height: 44px;
     padding: 0.55rem 1.2rem;
     background: #e8520a;
     color: #fff;
@@ -45,13 +51,22 @@
     font-weight: 600;
     text-decoration: none;
     transition: background 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .nav-download:hover { background: #d04708; }
-  .nav-download svg { width: 14px; height: 14px; }
+  /* FIX: keyboard focus visible */
+  .nav-download:focus-visible {
+    outline: 3px solid #e8520a;
+    outline-offset: 3px;
+  }
+  .nav-download svg { width: 14px; height: 14px; flex-shrink: 0; }
 
   /* HERO */
   .hero {
+    /* FIX: use dvh (dynamic viewport height) for mobile browsers with toolbars */
     min-height: calc(100vh - 65px);
+    min-height: calc(100dvh - 65px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -79,48 +94,6 @@
     margin: 0;
   }
 
-  /* BUSINESS PLAN SECTION */
-  .business {
-    /* No horizontal padding — business-area goes full-bleed */
-    padding: 5rem 0;
-  }
-  .business-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    color: #1a1a1a;
-    /* Padding lives here, not on the parent section */
-    padding: 0 7%;
-    margin-bottom: 2.5rem;
-  }
-  .business-area {
-    background: #efefef;
-    /* No border-radius — full-bleed edge-to-edge for max impact */
-    padding: 3.5rem 4%;
-    /* JS scales the pre to fit; horizontal scroll is a last-resort fallback */
-    overflow-x: auto;
-  }
-
-  /* TEXT ART — font-size is set entirely by JS; do NOT put clamp() here */
-  .plan-pre {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 400;
-    line-height: 1.85;
-    white-space: pre;          /* keep ASCII art lines intact */
-    color: #555;
-    margin: 0;
-    display: block;
-    /* No font-size declaration — fitPre() owns it */
-  }
-  .plan-pre .bold   { color: #1a1a1a; font-weight: 700; }
-  .plan-pre .green  { color: #1D9E75; font-weight: 700; }
-  .plan-pre .blue   { color: #378ADD; font-weight: 700; }
-  .plan-pre .purple { color: #7F77DD; font-weight: 700; }
-  .plan-pre .amber  { color: #BA7517; font-weight: 700; }
-  .plan-pre .teal   { color: #0F6E56; font-weight: 700; }
-  .plan-pre .red    { color: #E24B4A; font-weight: 700; }
-
   /* FOOTER */
   footer {
     padding: 1.8rem 7%;
@@ -131,72 +104,546 @@
     flex-wrap: wrap;
     gap: 0.5rem;
   }
-  .footer-name { font-size: 0.85rem; color: #aaa; font-weight: 400; }
+  .footer-name {
+    font-size: 0.85rem;
+    color: #aaa;
+    font-weight: 400;
+    /* FIX: prevent email overflow on small screens */
+    word-break: break-all;
+  }
   .footer-copy { font-size: 0.82rem; color: #bbb; }
 
-  @media (max-width: 600px) {
+  /* ══════════════════════════════════════════════════════════
+     ▼  REDESIGNED — "Konsi Problem ?" included + neeche sab
+  ══════════════════════════════════════════════════════════ */
+
+  .business {
+    padding: 5rem 0 6rem;
+  }
+
+  /* White card for each section */
+  .section-block {
+    background: #ffffff;
+    border-radius: 20px;
+    margin: 0 5% 2.5rem;
+    box-shadow:
+      0 1px 4px rgba(26, 18, 8, 0.05),
+      0 8px 32px rgba(26, 18, 8, 0.09);
+    /* FIX: use clip instead of hidden so child scroll containers still work */
+    overflow: clip;
+  }
+
+  /* Section heading — orange left bar as accent */
+  .business-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(1.55rem, 3.5vw, 2.4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: #1a1a1a;
+    padding: 2rem 2.8rem 1.6rem;
+    border-bottom: 1px solid #f0ece5;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .business-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1.25em;
+    background: #e8520a;
+    border-radius: 2px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* Dark warm terminal area */
+  .business-area {
+    background: #1c1812;
+    padding: 2.8rem 3.2rem;
+    overflow-x: hidden;        /* clip instead of scroll — text wraps via pre-wrap */
+  }
+
+  /* Pre text */
+  .plan-pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    line-height: 1.95;
+    white-space: pre-wrap;       /* wrap long lines instead of extending width */
+    overflow-wrap: break-word;   /* break any unbreakable sequence at container edge */
+    word-break: break-word;      /* safari fallback */
+    color: #c2b29a;
+    margin: 0;
+    display: block;
+    font-size: clamp(0.78rem, 1.8vw, 0.94rem);
+  }
+  .plan-pre .bold   { color: #eddcc6; font-weight: 700; }
+  .plan-pre .green  { color: #5ed4a0; font-weight: 700; }
+  .plan-pre .blue   { color: #78b8f8; font-weight: 700; }
+  .plan-pre .purple { color: #b4a8f8; font-weight: 700; }
+  .plan-pre .amber  { color: #f0b040; font-weight: 700; }
+  .plan-pre .teal   { color: #3dd4b0; font-weight: 700; }
+  .plan-pre .red    { color: #ff8080; font-weight: 700; }
+
+  /* CTA section */
+  .cta-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 2.4rem 2.8rem;
+    border-top: 1px solid #f0ece5;
+    background: #ffffff;
+  }
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    /* FIX: min-height 44px for touch target */
+    min-height: 44px;
+    padding: 0.85rem 2.2rem;
+    background: #e8520a;
+    color: #ffffff;
+    border-radius: 12px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    box-shadow: 0 4px 18px rgba(232, 82, 10, 0.28);
+    transition: background 0.2s, transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s;
+  }
+  .cta-primary:hover {
+    background: #d04708;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(232, 82, 10, 0.42);
+  }
+  .cta-primary:focus-visible {
+    outline: 3px solid #e8520a;
+    outline-offset: 3px;
+  }
+  .cta-hint {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.82rem;
+    color: #8a8078;
+    text-align: center;
+  }
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    /* FIX: min-height 44px for touch target */
+    min-height: 44px;
+    padding: 0.65rem 1.8rem;
+    background: transparent;
+    color: #6a6058;
+    border: 1.5px solid #d8d0c5;
+    border-radius: 10px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .cta-secondary:hover {
+    border-color: #a09080;
+    color: #1a1a1a;
+    transform: translateY(-1px);
+  }
+  .cta-secondary:focus-visible {
+    outline: 3px solid #e8520a;
+    outline-offset: 3px;
+  }
+
+  /* Scroll-reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition:
+      opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-d1 { transition-delay: 0.1s; }
+
+  /* ── Responsive — Tablet ── */
+  @media (max-width: 768px) {
     nav { padding: 1.2rem 5%; }
     .hero { padding: 3rem 5%; }
-    /* Section stays 0 side padding; title keeps its own */
-    .business { padding: 3.5rem 0; }
-    .business-title { padding: 0 5%; }
     footer { padding: 1.5rem 5%; }
-    .business-area { padding: 2rem 3%; }
+    .business { padding: 3.5rem 0 5rem; }
+    .section-block { margin: 0 4% 2rem; border-radius: 16px; }
+    .business-title { padding: 1.6rem 1.8rem 1.2rem; }
+    .business-area { padding: 2rem 1.8rem; }
+    .cta-section { padding: 1.8rem; }
   }
 
-.comparison-table {
-  margin: 3rem 0;
-  overflow-x: auto;
-}
-
-.comparison-table table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 0.95rem;
-  background: #ffffff;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.comparison-table th {
-  background: #f4f4f4;
-  color: #1a1a1a;
-  font-weight: 600;
-  padding: 1rem;
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.comparison-table td {
-  padding: 0.9rem;
-  text-align: center;
-  border-bottom: 1px solid #f0f0f0;
-  color: #444;
-}
-
-.comparison-table td:first-child {
-  text-align: left;
-  font-weight: 500;
-  color: #1a1a1a;
-  background: #fafafa;
-}
-
-.comparison-table tr:hover {
-  background: #fff7f2;
-}
-
-/* subtle highlight without bias */
-.comparison-table td:nth-child(4) {
-  font-weight: 600;
-}
-
-/* responsive */
-@media (max-width: 600px) {
-  .comparison-table table {
-    font-size: 0.85rem;
+  /* ── Responsive — Mobile ── */
+  @media (max-width: 480px) {
+    .business { padding: 2.5rem 0 4rem; }
+    .section-block { margin: 0 3.5% 1.6rem; border-radius: 14px; }
+    .business-title { padding: 1.3rem 1.4rem 1rem; font-size: clamp(1.3rem, 5.5vw, 1.7rem); }
+    .business-area { padding: 1.6rem 1.4rem; }
+    .cta-section { padding: 1.4rem 1.4rem 1.6rem; gap: 0.75rem; }
+    .cta-primary { padding: 0.8rem 1.6rem; font-size: 0.9rem; width: 100%; }
+    .cta-secondary { width: 100%; }
   }
-}
+
+  /* ── Responsive — Very small screens (320–360px) ── */
+  @media (max-width: 380px) {
+    nav { padding: 1rem 4%; }
+    .nav-name { font-size: 0.9rem; }
+    .nav-download { font-size: 0.78rem; padding: 0.55rem 0.85rem; gap: 0.35rem; }
+    .nav-download svg { width: 12px; height: 12px; }
+    .section-block { margin: 0 3% 1.4rem; }
+    footer { padding: 1.2rem 4%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .cta-primary, .cta-secondary { transition: background 0.2s, border-color 0.2s, color 0.2s; }
+    .cta-primary:hover, .cta-secondary:hover { transform: none; }
+  }
+
+  /* ════════════════════════════════════════════════════
+     NEW SECTIONS — Konsi Problem / Comparison / Kaam / Price
+  ════════════════════════════════════════════════════ */
+
+  /* ── Scroll prompt chip ── */
+  .scroll-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 1.4rem;
+    background: rgba(120, 184, 248, 0.12);
+    border: 1px solid rgba(120, 184, 248, 0.25);
+    border-radius: 99px;
+    padding: 0.4rem 1.1rem 0.4rem 0.8rem;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #78b8f8;
+    letter-spacing: 0.01em;
+    animation: bob 2.2s ease-in-out infinite;
+  }
+  .scroll-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(4px); }
+  }
+
+  /* ── Compare Shell ── */
+  .compare-shell {
+    background: #1c1812;
+    padding: 2.2rem 2.2rem 2.6rem;
+  }
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  /* Cards */
+  .cmp-card {
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+  .cmp-loser {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .cmp-winner {
+    background: #fff8f3;
+    border: 2.5px solid #e8520a;
+    box-shadow:
+      0 0 0 3px rgba(232,82,10,0.13),
+      0 14px 44px rgba(232,82,10,0.22);
+    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1);
+  }
+  .cmp-winner:hover { transform: scale(1.025); }
+
+  .cmp-winner-badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e8520a;
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 0.26rem 1rem;
+    border-radius: 0 0 10px 10px;
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+    font-family: 'Instrument Sans', sans-serif;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  .cmp-head {
+    padding: 2.2rem 0.85rem 0.9rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .cmp-winner .cmp-head { border-bottom-color: #f0d4be; }
+
+  .cmp-ico { font-size: 1.85rem; display: block; margin-bottom: 0.5rem; }
+  .cmp-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+  .cmp-loser .cmp-name { color: #7a6a5a; }
+  .cmp-winner .cmp-name { color: #c84000; font-size: 1.05rem; }
+
+  /* Score dots */
+  .cmp-dots {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 0.6rem;
+  }
+  .cmp-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .cmp-dot.on { background: #e8520a; opacity: 0.5; }
+  .cmp-dot.win { background: #e8520a; }
+  .cmp-winner .cmp-dot { background: #f5d0b0; }
+  .cmp-winner .cmp-dot.win { background: #e8520a; }
+
+  /* Attribute list */
+  .cmp-list {
+    list-style: none;
+    padding: 0.9rem 0.85rem 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.48rem;
+    flex: 1;
+  }
+  .cmp-list li {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.38rem;
+  }
+  .cmp-loser .cmp-list li { color: #7a6a5a; }
+  .cmp-winner .cmp-list li { color: #3a200e; font-size: 0.8rem; font-weight: 500; }
+  .cmp-li-icon { flex-shrink: 0; font-size: 0.78rem; }
+
+  /* Verdict chip */
+  .cmp-verdict {
+    margin: 0.55rem 0.7rem 0.9rem;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.38rem 0.5rem;
+    border-radius: 8px;
+    font-family: 'Instrument Sans', sans-serif;
+    letter-spacing: 0.01em;
+  }
+  .cmp-no  { background: rgba(200,80,80,0.15); color: #c07070; }
+  .cmp-win {
+    background: #e8520a;
+    color: #fff;
+    font-size: 0.82rem;
+    padding: 0.6rem 0.5rem;
+    border-radius: 10px;
+    margin: 0.5rem 0.65rem 1rem;
+    box-shadow: 0 4px 16px rgba(232,82,10,0.38);
+  }
+
+  /* ── Note Boxes (inside business-area, for Konsa Kaam) ── */
+  .note-boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    margin: 1.4rem 0;
+  }
+  .note-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-left: 3px solid #e8520a;
+    border-radius: 0 12px 12px 0;
+    padding: 1rem 1.1rem;
+  }
+  .note-box-label {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: #e8520a;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+  }
+  .note-box-body {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.55vw, 0.8rem);
+    line-height: 1.65;
+    color: #c2b29a;
+  }
+  .note-box-body strong { color: #f0b040; font-weight: 700; }
+  .note-box-body em { font-style: normal; color: #5ed4a0; }
+
+  /* ── Pricing Section Body ── */
+  .price-body {
+    background: #1c1812;
+    padding: 2.2rem 2.8rem;
+  }
+  .price-intro {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.78rem, 1.8vw, 0.9rem);
+    color: #c2b29a;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+  }
+  .price-tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.4rem;
+  }
+  .price-tile {
+    background: rgba(94,212,160,0.07);
+    border: 1.5px solid rgba(94,212,160,0.22);
+    border-radius: 14px;
+    padding: 1.4rem 1rem 1.2rem;
+    text-align: center;
+  }
+  .price-tile-label {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #8a9a8a;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.6rem;
+  }
+  .price-tile-amount {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    color: #5ed4a0;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+  }
+  .price-tile-tag {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.73rem;
+    font-weight: 700;
+    color: #5ed4a0;
+  }
+
+  .price-advantage {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-left: 3px solid #f0b040;
+    border-radius: 0 12px 12px 0;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.4rem;
+  }
+  .price-adv-title {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #f0b040;
+    margin-bottom: 0.45rem;
+    letter-spacing: -0.01em;
+  }
+  .price-adv-body {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.72rem, 1.6vw, 0.82rem);
+    color: #c2b29a;
+    line-height: 1.55;
+  }
+  .price-adv-body .red { color: #ff8080; font-weight: 700; }
+
+  .price-rule {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    margin: 0 0 1.4rem;
+  }
+
+  .price-perks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+  }
+  .price-perk {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.74rem, 1.65vw, 0.86rem);
+    color: #3dd4b0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .price-perk::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #3dd4b0;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Responsive: Tablet ── */
+  @media (max-width: 768px) {
+    .compare-shell { padding: 1.5rem 1.1rem 2rem; }
+    .compare-grid  { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    /* Winner spans full width on tablet */
+    .cmp-winner {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .cmp-winner .cmp-head {
+      flex: 0 0 auto;
+      width: 130px;
+      border-bottom: none;
+      border-right: 1px solid #f0d4be;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 2rem;
+    }
+    .cmp-winner .cmp-list { flex: 1; min-width: 0; }
+    .cmp-win { flex: 0 0 100%; }
+
+    .note-boxes { grid-template-columns: 1fr; }
+    .price-body  { padding: 1.6rem 1.3rem; }
+    .price-tiles { gap: 0.75rem; }
+  }
+
+  /* ── Responsive: Mobile ── */
+  @media (max-width: 480px) {
+    .compare-grid  { grid-template-columns: 1fr; }
+    .cmp-winner    { flex-direction: column; }
+    .cmp-winner .cmp-head {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #f0d4be;
+    }
+    .price-tiles { grid-template-columns: 1fr; }
+    .price-body  { padding: 1.4rem 1rem; }
+  }
 </style>
 </head>
 <body>
@@ -223,180 +670,209 @@
 
 <!-- BUSINESS PLAN -->
 <section class="business">
-  <h2 class="business-title">Konsi Problem ?</h2>
-  <div class="business-area">
-    <pre class="plan-pre">
-║━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━║
-║
-║🙎🏻‍♂️ Har busy insaan ke dimaag mein yeh baatein zaroor aati hain —
-║
-║ "Kash yeh kaam jaldi ho jaata."
-║ "Kash yeh kaam koi aur kar deta."
-║ "Aur mujhse salary bhi na maangta."
-║
-║ Toh maine socha — kya yeh possible hai?
-║
-║ 🎁 Aur jawab mila — Haan.
-║
-║ Maine ek aisa system banaya jo yeh sapna 
-║ poora karega  — bina salary ke.
-║
-║ [ Scroll karo — 3 minute mein poora samajh aayega ]
-║
-║━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━║
 
+  <!-- ══ SECTION 1 — Konsi Problem ? ══ -->
+  <div class="section-block reveal">
+    <h2 class="business-title">Konsi Problem ?</h2>
+    <div class="business-area">
+      <pre class="plan-pre"><span class="bold">🙎🏻‍♂️ Har busy insaan ke dimaag mein yeh baatein zaroor aati hain —</span>
 
-<div class="comparison-table">
-  <table>
-    <thead>
-      <tr>
-        <th></th>
-        <th>Employee</th>
-        <th>Robot</th>
-        <th>App / Software</th>
-        <th>Khudse karna</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Kaam karega?</td>
-        <td>✓</td>
-        <td>✓</td>
-        <td>✓</td>
-        <td>✓</td>
-      </tr>
-      <tr>
-        <td>Jaldi karega?</td>
-        <td>✕</td>
-        <td>✓</td>
-        <td>✓</td>
-        <td>✕</td>
-      </tr>
-      <tr>
-        <td>Salary maangega?</td>
-        <td>Haa</td>
-        <td>Nahi</td>
-        <td>Nahi</td>
-        <td>Nahi</td>
-      </tr>
-      <tr>
-        <td>Kitna expensive?</td>
-        <td>⚠ Monthly salary</td>
-        <td>✕ Bahut zyada!</td>
-        <td>✓ Sasta hai (One Time Installation)</td>
-        <td>✕ Mehnat aur Time</td>
-      </tr>
-      <tr>
-        <td>Kya lena chaiye ?</td>
-        <td>✕</td>
-        <td>✕</td>
-        <td>✓</td>
-        <td>✕</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-        
+<span class="amber">"Kash yeh kaam jaldi ho jaata."</span>
+<span class="amber">"Kash yeh kaam koi aur kar deta."</span>
+<span class="amber">"Aur mujhse salary bhi na maangta."</span>
+
+Toh maine socha — kya yeh possible hai?
+
+<span class="green">🎁 Aur jawab mila — <span class="bold">Haan.</span></span></pre>
+      <div class="scroll-chip">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Scroll karo — 3 minute mein poora samajh aayega
+      </div>
+    </div>
   </div>
 
-<br>
-<h2 class="business-title">Konsa Kaam ?</h2>
+  <!-- ══ SECTION 2 — Kon Karega ? ══ -->
+  <div class="section-block reveal reveal-d1">
+    <h2 class="business-title">Kon Karega ?</h2>
+    <div class="compare-shell">
+      <div class="compare-grid">
 
-<div class="business-area">
-    <pre class="plan-pre">
-Sach bolunga —
+        <!-- Employee -->
+        <div class="cmp-card cmp-loser">
+          <div class="cmp-head">
+            <span class="cmp-ico">👨‍💼</span>
+            <div class="cmp-name">Employee (Naukar)</div>
+            <div class="cmp-dots">
+              <span class="cmp-dot win"></span>
+              <span class="cmp-dot on"></span>
+              <span class="cmp-dot"></span>
+              <span class="cmp-dot"></span>
+              <span class="cmp-dot"></span>
+            </div>
+          </div>
+          <ul class="cmp-list">
+            <li><span class="cmp-li-icon">✅</span> Kaam ho jaega</li>
+            <li><span class="cmp-li-icon">🥱</span> Chutti + Holidays lega </li>
+            <li><span class="cmp-li-icon">💸</span> Har mahine salary chahiye</li>
+          </ul>
+          <div class="cmp-verdict cmp-no">❌</div>
+        </div>
 
-Na aapko pata hai, na mujhe.
+        <!-- Robot -->
+        <div class="cmp-card cmp-loser">
+          <div class="cmp-head">
+            <span class="cmp-ico">🤖</span>
+            <div class="cmp-name">Robot Worker</div>
+            <div class="cmp-dots">
+              <span class="cmp-dot win"></span>
+              <span class="cmp-dot win"></span>
+              <span class="cmp-dot win"></span>
+              <span class="cmp-dot on"></span>
+              <span class="cmp-dot"></span>
+            </div>
+          </div>
+          <ul class="cmp-list">
+            <li><span class="cmp-li-icon">✅</span> Kaam ho jaega</li>
+            <li><span class="cmp-li-icon">⚡</span> Tezi se kaam</li>
+            <li><span class="cmp-li-icon">🎁</span> Koi salary nahi</li>
+            <li><span class="cmp-li-icon">❌</span> Bahut costly — afford karna mushkil</li>
+          </ul>
+          <div class="cmp-verdict cmp-no">❌</div>
+        </div>
+
+        <!-- App / Software — WINNER -->
+        <div class="cmp-card cmp-winner">
+          <div class="cmp-winner-badge">⭐ Recommended</div>
+          <div class="cmp-head">
+            <span class="cmp-ico">💻</span>
+            <div class="cmp-name">App / Software Tool</div>
+            <div class="cmp-dots">
+              <span class="cmp-dot win"></span>
+              <span class="cmp-dot win"></span>
+              <span class="cmp-dot win"></span>
+              <span class="cmp-dot win"></span>
+              <span class="cmp-dot win"></span>
+            </div>
+          </div>
+          <ul class="cmp-list">
+            <li><span class="cmp-li-icon">✅</span> Kaam ho jaega</li>
+            <li><span class="cmp-li-icon">⚡</span> Tezi se kaam</li>
+            <li><span class="cmp-li-icon">🎁</span> Koi salary nahi</li>
+            <li><span class="cmp-li-icon">👍</span> One Time Payment, Lifetime Access</li>
+          </ul>
+          <div class="cmp-verdict cmp-win">✅</div>
+        </div>
+
+        <!-- Khud Karna -->
+        <div class="cmp-card cmp-loser">
+          <div class="cmp-head">
+            <span class="cmp-ico">🙋</span>
+            <div class="cmp-name">Khud Karna</div>
+            <div class="cmp-dots">
+              <span class="cmp-dot win"></span>
+              <span class="cmp-dot on"></span>
+              <span class="cmp-dot on"></span>
+              <span class="cmp-dot"></span>
+              <span class="cmp-dot"></span>
+            </div>
+          </div>
+          <ul class="cmp-list">
+            <li><span class="cmp-li-icon">✅</span> Kaam toh hoga</li>
+            <li><span class="cmp-li-icon">❌</span> Slow rahega</li>
+            <li><span class="cmp-li-icon">❌</span> Mehnat aur time bahut lagega</li>
+          </ul>
+          <div class="cmp-verdict cmp-no">❌</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3 — Konsa Kaam ? ══ -->
+  <div class="section-block reveal">
+    <h2 class="business-title">Konsa Kaam ?</h2>
+    <div class="business-area">
+      <pre class="plan-pre"><span class="bold">Sach bolunga —</span>
+
+<span class="amber">Na aapko pata hai, na mujhe.</span>
 
 Aur yeh bilkul theek hai.
 
 Kyunki har dukaan alag hoti hai,
 har kaam alag hota hai.
 
-Isliye main khud aaunga —
-30 se 60 minute, bas dekhne ke liye.
+Isliye main <span class="green">khud aaunga</span> —
+<span class="bold">30 se 60 minute</span>, bas dekhne ke liye.
 
-Koi sawaal nahi karunga, kuch baat nahi karunga.
+<span class="blue">Koi sawaal nahi karunga, kuch baat nahi karunga.</span>
 Sirf aapko kaam karte dekhunga aur apni notebook mein note karunga.
 
-Main Note karta hoon —
-# Konsa kaam baar-baar repeat hota hai. → Jo kisi aur se bhi karwa sakte ho.
-# Konsa kaam sirf aap kar sakte ho, → lekin bahut mehnat aur time lagta hai.
+<span class="bold">Main Note karta hoon —</span></pre>
+      <div class="note-boxes">
+        <div class="note-box">
+          <div class="note-box-label"># Observation 1</div>
+          <div class="note-box-body"><strong>Konsa kaam baar-baar repeat hota hai.</strong><br><em>→ Jo kisi aur se bhi karwa sakte ho.</em></div>
+        </div>
+        <div class="note-box">
+          <div class="note-box-label"># Observation 2</div>
+          <div class="note-box-body"><strong>Konsa kaam sirf aap kar sakte ho,</strong><br><em>→ lekin bahut mehnat aur time lagta hai.</em></div>
+        </div>
+      </div>
+      <pre class="plan-pre">Note hone ke baad mujhe pata chal jayega → <span class="green">"Konsa kaam ?"</span>
+Aapko bhi bta dunga wahi par → <span class="amber">"Konsa Kaam ?"</span>
 
-Note hone ke baad mujhe pata chal jayega → "Konsa kaam ?"
-aapko bhi bta dunga wahi par → "Konsa Kaam ?", phir mere jaane ka waqt ho jayega.
-    </pre>
-</div>
-    
-  <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; margin-top:2.8rem; padding: 0 7%;">
-
-    <a href="mailto:nihalthakral.github@gmail.com?subject=Interested%20%26%20Want%20to%20Communicate.&body=Hello%20Developer%2C%20%F0%9F%91%8B%0A%0AMujhe%20aapki%20service%20mein%20interest%20hai.%20%F0%9F%8C%9F%20Main%20chahta%2Fchahti%20hoon%20ki%20aap%20mere%20kaam%20ko%20samjhein%20aur%20ek%20solution%20banayein%20jo%20mere%20liye%20perfect%20ho.%0A%0ATum%20mujhe%20reply%20karo%20taaki%20hum%20aage%20baat%20kar%20sakein.%20%F0%9F%A4%9D%0A%0AThank%20you%2C%0AI%20am%20waiting%20for%20your%20Response."
-      style="display:inline-flex; align-items:center; gap:0.55rem; padding:0.75rem 2rem; background:#e8520a; color:#fff; border-radius:10px; font-family:'Instrument Sans',sans-serif; font-size:0.95rem; font-weight:600; text-decoration:none; letter-spacing:-0.01em; transition:background 0.2s;"
-      onmouseover="this.style.background='#d04708'" onmouseout="this.style.background='#e8520a'" target="_blank">
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      Contact &#8212; If you're Interested
-    </a>
-
+<span class="blue">Phir mere jaane ka waqt ho jayega.</span></pre>
+    </div>
   </div>
 
-<br><br>
+  <!-- ══ SECTION 4 — ₹ Rupee kitne lagenge ? ══ -->
+  <div class="section-block reveal reveal-d1">
+    <h2 class="business-title">₹ Rupee kitne lagenge ?</h2>
+    <div class="price-body">
+      <div class="price-intro">Seedha bolta hoon —</div>
+      <div class="price-tiles">
+        <div class="price-tile">
+          <div class="price-tile-label">🟢 Visit (30–60 minutes)</div>
+          <div class="price-tile-amount">₹0</div>
+          <div class="price-tile-tag">🎁 Bilkul Free</div>
+        </div>
+        <div class="price-tile">
+          <div class="price-tile-label">🟢 App / Software</div>
+          <div class="price-tile-amount">₹0</div>
+          <div class="price-tile-tag">🎁 Free Trial - 30 Days</div>
+        </div>
+      </div>
+      <div class="price-advantage">
+        <div class="price-adv-title">30 Days Free Trial — Advantage 🤔</div>
+        <div class="price-adv-body">Pasand nahi aaya — <span class="red">Purchase mat karo App / Software ❌</span></div>
+      </div>
+      <hr class="price-rule">
+      <pre class="plan-pre"><span class="bold">App / Software ki cost ??</span>
 
-<h2 class="business-title">₹ Rupee kitne lagenge ?</h2>
-<div class="business-area">
-    <pre class="plan-pre">
-Seedha bolta hoon —
-
-🟢 Visit (30–60 minutes) → ₹0 🎁 Bilkul Free
-
-🟢 App / Software      → ₹0 🎁 Free Trial (30 Days only)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-30 Days Free Trial - Advantage 🤔
-
-# Pasand nahi aaya --- Purchase mat karo App / Software . ❌
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-App / Software ki cost ??
-
-→ Normal Employee ki ek mahine ki salary se bhi kam.
-
-→ Ek baar ka payment. Zindagi bhar ka access.
-        
-Koi Subscription nahi.
-Koi Hidden charges nahi.
-Koi Monthly Salary nahi
-
-Mobile ✅  + Computer ❌  →  Chalega ✅
-Mobile ❌  + Computer ✅  →  Chalega ✅
-Mobile ✅  + Computer ✅  →  Chalega ✅
-Mobile ❌  + Computer ❌  →  Sorry ❌
-
-    </pre>
-</div>
-
-<div style="display:flex; flex-direction:column; align-items:center; gap:1rem; margin-top:2.8rem; padding: 0 7%;">
-
-    <a href="mailto:nihalthakral.github@gmail.com?subject=Interested%20%26%20Want%20to%20Communicate.&body=Hello%20Developer%2C%20%F0%9F%91%8B%0A%0AMujhe%20aapki%20service%20mein%20interest%20hai.%20%F0%9F%8C%9F%20Main%20chahta%2Fchahti%20hoon%20ki%20aap%20mere%20kaam%20ko%20samjhein%20aur%20ek%20solution%20banayein%20jo%20mere%20liye%20perfect%20ho.%0A%0ATum%20mujhe%20reply%20karo%20taaki%20hum%20aage%20baat%20kar%20sakein.%20%F0%9F%A4%9D%0A%0AThank%20you%2C%0AI%20am%20waiting%20for%20your%20Response."
-      style="display:inline-flex; align-items:center; gap:0.55rem; padding:0.75rem 2rem; background:#e8520a; color:#fff; border-radius:10px; font-family:'Instrument Sans',sans-serif; font-size:0.95rem; font-weight:600; text-decoration:none; letter-spacing:-0.01em; transition:background 0.2s;"
-      onmouseover="this.style.background='#d04708'" onmouseout="this.style.background='#e8520a'" target="_blank">
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      Contact &#8212; Try Now !
-    </a>
-
-automatic message ho jaayega. aap sirf click karo. 😄🤗
-    
+<span class="green">→</span> Normal Employee ki ek mahine ki salary se bhi <span class="green">kam.</span>
+<span class="green">→</span> <span class="bold">Ek baar ka payment. Zindagi bhar ka access.</span></pre>
+      <div class="price-perks">
+        <div class="price-perk">Koi Subscription nahi.</div>
+        <div class="price-perk">Koi Hidden charges nahi.</div>
+        <div class="price-perk">Koi Monthly Salary nahi.</div>
+      </div>
+    </div>
   </div>
 
-<div style="display:flex; flex-direction:column; align-items:center; gap:1rem; margin-top:2.8rem; padding: 0 7%;">
+    <div class="cta-section">
+      <a href="mailto:nihalthakral.github@gmail.com?subject=Interested%20%26%20Want%20to%20Communicate.&body=Hello%20Developer%2C%20%F0%9F%91%8B%0A%0AMujhe%20aapki%20service%20mein%20interest%20hai.%20%F0%9F%8C%9F%20Main%20chahta%2Fchahti%20hoon%20ki%20aap%20mere%20kaam%20ko%20samjhein%20aur%20ek%20solution%20banayein%20jo%20mere%20liye%20perfect%20ho.%0A%0ATum%20mujhe%20reply%20karo%20taaki%20hum%20aage%20baat%20kar%20sakein.%20%F0%9F%A4%9D%0A%0AThank%20you%2C%0AI%20am%20waiting%20for%20your%20Response."
+        class="cta-primary" target="_blank">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Contact &#8212; Try Now !
+      </a>
+      <span class="cta-hint">automatic message ho jaayega. aap sirf click karo. 😄🤗</span>
+      <a href="https://mail.google.com/mail/u/0/#search/from:nihalthakral.github@gmail.com"
+        class="cta-secondary" target="_blank">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Check Replies
+      </a>
+    </div>
 
-    <a href="https://mail.google.com/mail/u/0/#search/from:nihalthakral.github@gmail.com"
-      style="display:inline-flex; align-items:center; gap:0.55rem; padding:0.6rem 1.8rem; background:transparent; color:#555; border:1.5px solid #ccc; border-radius:10px; font-family:'Instrument Sans',sans-serif; font-size:0.88rem; font-weight:500; text-decoration:none; letter-spacing:-0.01em; transition:border-color 0.2s, color 0.2s;"
-      onmouseover="this.style.borderColor='#888';this.style.color='#1a1a1a'" onmouseout="this.style.borderColor='#ccc';this.style.color='#555'" target="_blank">
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-      Check Replies
-    </a>
-</div>
-    
 </section>
 
 <!-- FOOTER -->
@@ -406,66 +882,87 @@ automatic message ho jaayega. aap sirf click karo. 😄🤗
 </footer>
 
 <script>
-/* ─── Auto-scale: fit the pre to the container width ────────────────────────
-   Strategy:
-   1. Reset font-size to a known baseline (16px).
-   2. Force synchronous reflow so the browser re-measures the element.
-   3. Read the pre's natural scroll-width (widest line) vs available container
-      width (container minus its own padding).
-   4. Scale = available / natural → new font-size = 16px × scale.
-   5. Floor at 7px so it never becomes invisible on tiny screens.
-   6. Re-run after fonts are loaded (Google Fonts arrive async → first measure
-      uses fallback metrics → result slightly off → fonts.ready corrects it).
-   7. Debounced resize listener keeps it live on window resize / orientation
-      change.
+/* ─── Auto-scale: fit plan-pre text to container width ──────────────────────
+   FIX: fitPre now iterates ALL .plan-pre / .business-area pairs (not just first)
+   FIX: floor raised from 7px to 11px — text stays readable, area stays scrollable
 ─────────────────────────────────────────────────────────────────────────── */
 (function () {
+  /* ── fitPre — FIX: handle every section, not just the first ── */
   function fitPre() {
-    var pre  = document.querySelector('.plan-pre');
-    var area = document.querySelector('.business-area');
-    if (!pre || !area) return;
+    var pres  = document.querySelectorAll('.plan-pre');
+    var areas = document.querySelectorAll('.business-area');
 
-    // Reset to baseline so scrollWidth reflects 16px character widths
-    pre.style.fontSize = '16px';
+    pres.forEach(function (pre, i) {
+      var area = areas[i];
+      if (!pre || !area) return;
 
-    // Force the browser to flush and recalculate layout synchronously
-    void pre.offsetWidth;
+      pre.style.fontSize = '16px';
+      void pre.offsetWidth; /* force reflow */
 
-    var cs     = window.getComputedStyle(area);
-    var avail  = area.clientWidth
-                 - parseFloat(cs.paddingLeft  || '0')
-                 - parseFloat(cs.paddingRight || '0');
-    var natW   = pre.scrollWidth;
+      var cs    = window.getComputedStyle(area);
+      var avail = area.clientWidth
+                  - parseFloat(cs.paddingLeft  || '0')
+                  - parseFloat(cs.paddingRight || '0');
+      var natW  = pre.scrollWidth;
 
-    if (natW > 0 && avail > 0) {
-      var newSize = 16 * (avail / natW);
-      pre.style.fontSize = Math.max(7, newSize) + 'px';
-    }
+      if (natW > 0 && avail > 0) {
+        /* FIX: floor raised to 11px — unreadable text is worse than scrolling */
+        var scaled = 16 * (avail / natW);
+        pre.style.fontSize = (scaled >= 11 ? scaled : 11) + 'px';
+        /* If even 11px is too wide, business-area's overflow-x:auto takes over */
+      }
+    });
   }
 
-  // Run once DOM is ready
+  function fitAll() { fitPre(); }
+
+  /* Run once DOM is ready */
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fitPre);
+    document.addEventListener('DOMContentLoaded', fitAll);
   } else {
-    fitPre();
+    fitAll();
   }
 
-  // Re-run after Google Fonts finish loading (async) for accurate metrics
+  /* Re-run after Google Fonts load */
   var fontsReady = (document.fonts && document.fonts.ready)
     ? document.fonts.ready
     : Promise.resolve();
-  fontsReady.then(fitPre);
+  fontsReady.then(fitAll);
 
-  // Debounced resize / orientation handler
+  /* Debounced resize / orientation handler */
   var _resizeTimer;
   window.addEventListener('resize', function () {
     clearTimeout(_resizeTimer);
-    _resizeTimer = setTimeout(fitPre, 60);
+    _resizeTimer = setTimeout(fitAll, 60);
   });
   window.addEventListener('orientationchange', function () {
     clearTimeout(_resizeTimer);
-    _resizeTimer = setTimeout(fitPre, 120);
+    _resizeTimer = setTimeout(fitAll, 120);
   });
+})();
+</script>
+
+<script>
+/* ─── Scroll-reveal ── */
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('in-view'); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+
+  els.forEach(function (el) { observer.observe(el); });
 })();
 </script>
 
