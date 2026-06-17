@@ -10,7 +10,7 @@ const CONFIG = {
   expiryDate: "2026-7-10",
 
   // Tracker naam — spaces ki jagah _ use karo
-  trackerName: "Rahul_Thakur_Easy_Calculator",
+  trackerName: "rahul_thakur_8868884079_easy_calculator",
 
   // Services / Products list
   // unit examples: "page", "meter", "piece", "kg", "item", "sheet"
