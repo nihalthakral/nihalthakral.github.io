@@ -1,277 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nihal Thakral — Software Store</title>
-<style>
-  :root{
-    --bg:#0f0a2e;
-    --bg2:#1a1147;
-    --violet:#7c3aed;
-    --pink:#ec4899;
-    --amber:#fbbf24;
-    --cyan:#22d3ee;
-    --text:#f4f1ff;
-    --muted:#a89fd6;
-    --card:#171034;
-    --card-border:rgba(255,255,255,0.08);
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-    background:
-      radial-gradient(circle at 15% 10%, rgba(124,58,237,0.35), transparent 45%),
-      radial-gradient(circle at 85% 0%, rgba(236,72,153,0.28), transparent 40%),
-      radial-gradient(circle at 50% 100%, rgba(34,211,238,0.18), transparent 50%),
-      var(--bg);
-    color:var(--text);
-    min-height:100vh;
-    overflow-x:hidden;
-  }
-
-  /* ---------- Header ---------- */
-  header{
-    padding:60px 20px 40px;
-    text-align:center;
-    position:relative;
-  }
-  .eyebrow{
-    display:inline-block;
-    font-size:0.78rem;
-    letter-spacing:0.2em;
-    text-transform:uppercase;
-    color:var(--amber);
-    font-weight:700;
-    padding:6px 16px;
-    border:1px solid rgba(251,191,36,0.35);
-    border-radius:999px;
-    background:rgba(251,191,36,0.08);
-    margin-bottom:22px;
-  }
-  h1{
-    font-size:clamp(2.2rem, 6vw, 4rem);
-    font-weight:800;
-    line-height:1.05;
-    letter-spacing:-0.02em;
-    background:linear-gradient(100deg, #ffffff 0%, var(--cyan) 45%, var(--pink) 80%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-    max-width:850px;
-    margin:0 auto 18px;
-  }
-  header p.sub{
-    color:var(--muted);
-    font-size:1.05rem;
-    max-width:520px;
-    margin:0 auto;
-  }
-  .author{
-    margin-top:28px;
-    font-size:0.9rem;
-    color:var(--muted);
-    letter-spacing:0.02em;
-  }
-  .author strong{
-    color:var(--text);
-    background:linear-gradient(90deg, var(--amber), var(--pink));
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-    font-weight:700;
-  }
-
-  /* ---------- Grid ---------- */
-  main{
-    max-width:1180px;
-    margin:0 auto;
-    padding:20px 24px 100px;
-  }
-  #grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(270px, 1fr));
-    gap:28px;
-  }
-
-  /* ---------- Card ---------- */
-  .card{
-    position:relative;
-    background:linear-gradient(160deg, var(--card) 0%, #120c2e 100%);
-    border:1px solid var(--card-border);
-    border-radius:20px;
-    padding:30px 26px 26px;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    gap:14px;
-    isolation:isolate;
-    overflow:hidden;
-    transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s ease, box-shadow .35s ease;
-  }
-  .card::before{
-    content:"";
-    position:absolute;
-    inset:-2px;
-    background:conic-gradient(from 180deg, var(--violet), var(--pink), var(--amber), var(--cyan), var(--violet));
-    border-radius:22px;
-    opacity:0;
-    z-index:-1;
-    transition:opacity .35s ease;
-  }
-  .card::after{
-    content:"";
-    position:absolute;
-    inset:1px;
-    background:linear-gradient(160deg, var(--card) 0%, #120c2e 100%);
-    border-radius:19px;
-    z-index:-1;
-  }
-  .card:hover{
-    transform:translateY(-8px) rotate(-0.3deg);
-    box-shadow:0 20px 50px -18px rgba(124,58,237,0.6);
-  }
-  .card:hover::before{opacity:1;}
-
-  .logo-badge{
-    width:64px;
-    height:64px;
-    border-radius:16px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.6rem;
-    font-weight:800;
-    color:#0f0a2e;
-    background:linear-gradient(135deg, var(--amber), var(--pink));
-    transform:rotate(-6deg);
-    box-shadow:0 10px 22px -8px rgba(236,72,153,0.55);
-    flex-shrink:0;
-  }
-  .logo-badge img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    border-radius:16px;
-  }
-
-  .name{
-    font-size:1.3rem;
-    font-weight:700;
-    letter-spacing:-0.01em;
-  }
-  .price-row{
-    display:flex;
-    align-items:baseline;
-    gap:6px;
-    margin-top:auto;
-  }
-  .price{
-    font-size:1.6rem;
-    font-weight:800;
-    color:var(--amber);
-  }
-  .price-label{
-    font-size:0.78rem;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:0.08em;
-  }
-
-  .book-btn{
-    margin-top:10px;
-    width:100%;
-    padding:13px 18px;
-    border:none;
-    border-radius:12px;
-    background:linear-gradient(90deg, var(--violet), var(--pink));
-    color:#fff;
-    font-size:0.95rem;
-    font-weight:700;
-    letter-spacing:0.02em;
-    cursor:pointer;
-    text-decoration:none;
-    text-align:center;
-    display:inline-block;
-    transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
-    box-shadow:0 8px 20px -8px rgba(124,58,237,0.7);
-  }
-  .book-btn:hover{
-    transform:translateY(-2px) scale(1.02);
-    filter:brightness(1.08);
-    box-shadow:0 12px 26px -8px rgba(236,72,153,0.75);
-  }
-  .book-btn:active{transform:translateY(0) scale(0.98);}
-
-  footer{
-    text-align:center;
-    padding:34px 20px 50px;
-    color:var(--muted);
-    font-size:0.85rem;
-    border-top:1px solid var(--card-border);
-  }
-  footer strong{color:var(--text);}
-
-  @media (max-width:480px){
-    header{padding:44px 16px 30px;}
-    .card{padding:24px 20px 22px;}
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .card, .book-btn{transition:none;}
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nihal Thakral | Developer Portfolio</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        header {
+            margin-bottom: 4rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        h2 {
+            font-size: 1.25rem;
+            color: var(--accent);
+            font-weight: 400;
+            margin-top: 0;
+        }
+        p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 0.5rem;
+        }
+        .project {
+            margin-bottom: 2rem;
+        }
+        .project h3 {
+            font-size: 1.2rem;
+            margin: 0 0 0.25rem 0;
+            color: var(--text-main);
+        }
+        .project p {
+            font-size: 1rem;
+            margin: 0;
+        }
+        .tech-stack {
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-top: 0.25rem;
+            display: block;
+        }
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #7dd3fc;
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 2rem 1.5rem; }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Nihal Thakral</h1>
+            <h2>Professional JavaScript Developer & Software Engineer</h2>
+            <p>Crafting intelligent software solutions, from custom Linux boot utilities and browser extensions to advanced market analysis tools.</p>
+        </header>
 
-<header>
-  <span class="eyebrow">Do Your Business Like a Professional</span>
-  <h1>PC & Mobile Phone Supported</h1>
-  <p class="sub"></p>
-  <div class="author">Developer <strong>Nihal Thakral</strong></div>
-</header>
+        <section>
+            <h2 class="section-title">Featured Projects</h2>
+            
+            <div class="project">
+                <h3>YouTube Subtitle Translator & TTS</h3>
+                <p>A custom Chrome extension that fetches English video transcripts, translates them to Hindi, and synchronizes text-to-speech audio with playback.</p>
+                <span class="tech-stack">JavaScript • Chrome Extension API</span>
+            </div>
 
-<main>
-  <div id="grid"></div>
-</main>
+            <div class="project">
+                <h3>Linux Bootable USB Creator</h3>
+                <p>A custom Python-based utility similar to Rufus, specifically designed for Linux distributions with advanced persistent storage configuration (e.g., dedicated sda3 partitions) to prevent system overwrites.</p>
+                <span class="tech-stack">Python • System Storage</span>
+            </div>
 
-<footer>
-  © 2026 <strong>Nihal Thakral</strong>. All rights reserved.
-</footer>
+            <div class="project">
+                <h3>Advanced TradingView Indicators</h3>
+                <p>Developed custom market analysis tools including precise FVG mitigation logic and Cluster Low Break trackers with strict line invalidation rules.</p>
+                <span class="tech-stack">Pine Script • Market Analysis</span>
+            </div>
 
-<script>
-  // ===== EDIT THIS LIST TO ADD/REMOVE/UPDATE YOUR SOFTWARE =====
-  // logo: put an image URL here (optional). If left empty "", the first
-  // letter of software_name will be shown instead as a colorful badge.
-  const softwareList = [
-    { software_name: "Medical Store - Expiry Management", price: 1999, link: "https://medical-store.gt.tc", logo: "https://medical-store.gt.tc/images/logo.svg" }
-  ];
-  // ================================================================
+            <div class="project">
+                <h3>"AI Mode" Alexa Skill</h3>
+                <p>A custom voice assistant integration that bridges conversational AI with Alexa devices for seamless bilingual interaction.</p>
+                <span class="tech-stack">Node.js • Alexa Skills Kit</span>
+            </div>
+        </section>
 
-  const grid = document.getElementById('grid');
+        <section>
+            <h2 class="section-title">Contact</h2>
+            <p>Check out my published apps on the <a href="https://www.amazon.com/appstore" target="_blank">Amazon Appstore</a> or reach out via <a href="mailto:your.email@example.com">Email</a>.</p>
+        </section>
 
-  softwareList.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    const logoHTML = item.logo && item.logo.trim() !== ""
-      ? `<img src="${item.logo}" alt="${item.software_name} logo">`
-      : item.software_name.charAt(0).toUpperCase();
-
-    card.innerHTML = `
-      <div class="logo-badge">${logoHTML}</div>
-      <div class="name">${item.software_name}</div>
-      <div class="price-row">
-        <span class="price">₹${item.price}</span>
-        <span class="price-label">/ one-time</span>
-      </div>
-      <a class="book-btn" href="${item.link}" target="_blank" rel="noopener noreferrer">Book Now</a>
-    `;
-
-    grid.appendChild(card);
-  });
-</script>
-
+        <footer>
+            &copy; 2026 Nihal Thakral. All rights reserved.
+        </footer>
+    </div>
 </body>
 </html>
